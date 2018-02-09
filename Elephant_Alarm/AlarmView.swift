@@ -1,5 +1,5 @@
 //
-//  ViewHolder.swift
+//  AlarmView.swift
 //  Elephant_Alarm
 //
 //  Created by Stephen Reese on 2/8/18.
@@ -8,10 +8,8 @@
 
 import UIKit
 
-class ViewHolder: UIView
+class AlarmView : UIView
 {
-    var alarm : AlarmView = AlarmView()
-    
     override init(frame: CGRect)
     {
         super.init(frame: frame)
@@ -22,5 +20,3 @@ class ViewHolder: UIView
         fatalError("init(coder:) has not been implemented")
     }
 }
-
-
