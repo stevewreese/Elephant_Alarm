@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         mainWindow.rootViewController = UIViewController()
         
         let rootView = ViewHolder()
-        rootView.backgroundColor = UIColor.cyan
+        rootView.backgroundColor = UIColor.darkGray
         
         mainWindow.rootViewController?.view = rootView
         mainWindow.makeKeyAndVisible()

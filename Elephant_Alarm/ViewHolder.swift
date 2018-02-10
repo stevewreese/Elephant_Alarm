@@ -15,6 +15,15 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource
     var eventTable : UITableView!
     let width = UIScreen.main.bounds.width
     let height = UIScreen.main.bounds.height
+    let buttonEvent = UIButton(frame: CGRect(x: 75, y: 50, width: 100, height: 50))
+    let buttonAlarm = UIButton(frame: CGRect(x: 275, y: 50, width: 100, height: 50))
+    
+    let clock: AlarmView = {
+        let clock = AlarmView()
+        clock.backgroundColor = UIColor.init(red: 46/255, green: 15/255, blue: 77/255, alpha: 1)
+        return clock
+        
+    }()
     
     override init(frame: CGRect)
     {
@@ -29,8 +38,10 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource
         eventTable.dataSource = self
         eventTable.delegate = self
         
-        self.addSubview(alarmTable)
-        //self.addSubview(eventTable)
+        //self.addSubview(alarmTable)
+        self.addSubview(clock)
+        
+        //setupButtons()
         
     }
     
@@ -62,6 +73,48 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource
         
         return cell!
     }
+    
+    private func setupButtons() {
+
+        buttonEvent.backgroundColor = .blue
+        //buttonEvent.layer.cornerRadius = 5
+        buttonEvent.setTitleColor(.black, for: .normal)
+        buttonEvent.setTitle("Events", for: .normal)
+        buttonEvent.addTarget(self, action: #selector(ViewHolder.changeToEvent(sender:)), for: .touchUpInside)
+        self.addSubview(buttonEvent)
+        
+        //buttonAlarm.layer.cornerRadius = 5
+        buttonAlarm.backgroundColor = .white
+        buttonAlarm.setTitleColor(.black, for: .normal)
+        buttonAlarm.setTitle("Alarms", for: .normal)
+        buttonAlarm.addTarget(self, action: #selector(ViewHolder.changeToAlarm(sender:)), for: .touchUpInside)
+        self.addSubview(buttonAlarm)
+    }
+    
+    @objc func changeToEvent(sender: UIButton!)
+    {
+        if(sender.backgroundColor == .blue)
+        {
+            sender.backgroundColor = .white
+            buttonAlarm.backgroundColor = .blue
+            alarmTable.removeFromSuperview()
+            self.addSubview(eventTable)
+        }
+
+    }
+    
+    @objc func changeToAlarm(sender: UIButton!)
+    {
+        if(sender.backgroundColor == .blue)
+        {
+            sender.backgroundColor = .white
+            buttonEvent.backgroundColor = .blue
+            eventTable.removeFromSuperview()
+            self.addSubview(alarmTable)
+        }
+
+    }
+    
 }
 
 
