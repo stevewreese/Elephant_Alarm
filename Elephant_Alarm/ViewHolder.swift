@@ -19,8 +19,8 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource
     let buttonAlarm = UIButton(frame: CGRect(x: 275, y: 50, width: 100, height: 50))
     
     let clock: AlarmView = {
-        let clock = AlarmView()
-        clock.backgroundColor = UIColor.init(red: 46/255, green: 15/255, blue: 77/255, alpha: 1)
+        let clock = AlarmView(frame: UIScreen.main.bounds)
+        //clock.backgroundColor = UIColor.init(red: 46/255, green: 15/255, blue: 77/255, alpha: 1)
         return clock
         
     }()
