@@ -10,6 +10,8 @@ import UIKit
 
 class AlarmView : UIView, UITextFieldDelegate
 {
+    
+    
     /*A set of enum values which represents the days of the week on which the alarm will occur.*/
     enum Alarm_Days {
         case Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
@@ -28,6 +30,9 @@ class AlarmView : UIView, UITextFieldDelegate
     var TimeZone = Alarm_Time_Zone.Mountain
     var secondsAdded: Int = 0
     var minutesAdded : Int = 0
+    var EventField: UITextField = UITextField (frame: CGRect(x: 0, y: 550, width: UIScreen.main.bounds.width, height: 50));
+    var index: Int = 0;
+    var theControl: Control? = nil
     
     
     
@@ -39,10 +44,25 @@ class AlarmView : UIView, UITextFieldDelegate
         self.backgroundColor = .blue
         setupButtons()
         
+        let placeText = "Add event name here"
+        let placeholder = NSAttributedString(string: "\(placeText)", attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray])
+        
+        EventField.attributedPlaceholder = placeholder
+        EventField.textColor = UIColor.black
+        EventField.delegate = self
+        EventField.borderStyle = UITextBorderStyle.roundedRect
+        EventField.allowsEditingTextAttributes = true
+        self.addSubview(EventField)
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setIndex(index: Int)
+    {
+        self.index = index
     }
     
     override func draw(_ rect: CGRect){
@@ -97,15 +117,7 @@ class AlarmView : UIView, UITextFieldDelegate
         {
             addZeroSec = "0"
         }
-        let placeText = "Add event name here"
-        let placeholder = NSAttributedString(string: "\(placeText)", attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray])
-        var HourField: UITextField = UITextField (frame: CGRect(x: 0, y: 550, width: UIScreen.main.bounds.width, height: 50));
-        HourField.attributedPlaceholder = placeholder
-        HourField.textColor = UIColor.black
-        HourField.delegate = self
-        HourField.borderStyle = UITextBorderStyle.roundedRect
-        HourField.allowsEditingTextAttributes = true
-        self.addSubview(HourField)
+
         
         let red: CGFloat = 195/255
         let green: CGFloat = 93/255
@@ -185,6 +197,14 @@ class AlarmView : UIView, UITextFieldDelegate
         
         let xBase = 100
         let yBase = 225
+        
+        let saveButton = UIButton(frame: CGRect(x: xBase, y: 50, width: 100, height: 25))
+        saveButton.backgroundColor = .cyan
+        saveButton.layer.cornerRadius = 5
+        saveButton.setTitleColor(.black, for: .normal)
+        saveButton.setTitle("Save", for: .normal)
+        saveButton.addTarget(self, action: #selector(AlarmView.save(sender:)), for: .touchUpInside)
+        self.addSubview(saveButton)
         
         //day Buttons
         let buttonChangeNextDay = UIButton(frame: CGRect(x: xBase + 220, y: yBase - 50, width: 25, height: 25))
@@ -567,6 +587,20 @@ class AlarmView : UIView, UITextFieldDelegate
         }
         addClock()
     }
+    @objc func save(sender: UIButton!)
+    {
+        print("Day: \(Week_Day) TimeZone: \(TimeZone) Seconds: \(seconds) Event: \(EventField.text!)")
+        theControl?.alarmSaved(AlarmIndex: index)
+        
+    }
+    
+    func setControl(theControl: Control)
+    {
+        self.theControl = theControl
+    }
+    
+    
+
 
 
     

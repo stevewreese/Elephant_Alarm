@@ -8,8 +8,13 @@
 
 import UIKit
 
-class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource
+class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDelegate
 {
+    func saved(theIndex index: Int) {
+        alarmList[index].removeFromSuperview()
+
+    }
+    
     var alarm : AlarmView = AlarmView()
     var alarmTable : UITableView!
     var eventTable : UITableView!
@@ -17,13 +22,8 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource
     let height = UIScreen.main.bounds.height
     let buttonEvent = UIButton(frame: CGRect(x: 75, y: 50, width: 100, height: 50))
     let buttonAlarm = UIButton(frame: CGRect(x: 275, y: 50, width: 100, height: 50))
-    
-    let clock: AlarmView = {
-        let clock = AlarmView(frame: UIScreen.main.bounds)
-        //clock.backgroundColor = UIColor.init(red: 46/255, green: 15/255, blue: 77/255, alpha: 1)
-        return clock
-        
-    }()
+    var alarmList : Array<AlarmView> = Array()
+    var theControl = Control();
     
     override init(frame: CGRect)
     {
@@ -38,10 +38,10 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource
         eventTable.dataSource = self
         eventTable.delegate = self
         
-        //self.addSubview(alarmTable)
-        self.addSubview(clock)
+        self.addSubview(alarmTable)
         
-        //setupButtons()
+        setupButtons()
+        theControl.delegate = self
         
     }
     
@@ -50,7 +50,24 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-         return 15
+         return alarmList.count + 1
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
+        if tableView == self.alarmTable {
+            if(alarmList.count > indexPath.row)
+            {
+                self.addSubview(alarmList[indexPath.row])
+            }
+            else{
+                let clock = AlarmView(frame: UIScreen.main.bounds)
+                clock.setIndex(index: indexPath.row)
+                clock.setControl(theControl: theControl)
+                self.addSubview(clock)
+                alarmList.append(clock)
+            }
+            
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -114,6 +131,8 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource
         }
 
     }
+    
+    
     
 }
 
