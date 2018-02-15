@@ -11,7 +11,7 @@ import UIKit
 //delegates of teh control
 protocol ControlDelegate: class
 {
-    func saved(theIndex index: Int)
+    func saved(theIndex index: Int, clock theTime: time)
 
 }
 
@@ -19,14 +19,21 @@ protocol ControlDelegate: class
 class Control
 {
     weak var delegate: ControlDelegate? = nil
+    var theModel: Model = Model()
+    
     init()
     {
         
     }
     
-    func alarmSaved(AlarmIndex: Int)
+    func alarmSaved(AlarmIndex: Int, secs: Int)
     {
-        delegate?.saved(theIndex: AlarmIndex)
+        delegate?.saved(theIndex: AlarmIndex, clock: theModel.calcTime(seconds: secs))
+    }
+    
+    func getTime(secs: Int) -> time
+    {
+        return theModel.calcTime(seconds: secs)
     }
 
 }

@@ -10,10 +10,7 @@ import UIKit
 
 class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDelegate
 {
-    func saved(theIndex index: Int) {
-        alarmList[index].removeFromSuperview()
 
-    }
     
     var alarm : AlarmView = AlarmView()
     var alarmTable : UITableView!
@@ -24,6 +21,7 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
     let buttonAlarm = UIButton(frame: CGRect(x: 275, y: 50, width: 100, height: 50))
     var alarmList : Array<AlarmView> = Array()
     var theControl = Control();
+    var indexArray : Int = 0
     
     override init(frame: CGRect)
     {
@@ -43,6 +41,12 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
         setupButtons()
         theControl.delegate = self
         
+        let clock = AlarmView(frame: UIScreen.main.bounds)
+        clock.setIndex(index: indexArray)
+        clock.setControl(theControl: theControl)
+        alarmList.append(clock)
+        indexArray = indexArray + 1
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -50,21 +54,27 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-         return alarmList.count + 1
+        if tableView == self.alarmTable {
+            return alarmList.count
+        }
+        else{
+            return 1
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         if tableView == self.alarmTable {
-            if(alarmList.count > indexPath.row)
+            self.addSubview(alarmList[indexPath.row])
+            if(indexPath.row == alarmList.count - 1)
             {
-                self.addSubview(alarmList[indexPath.row])
-            }
-            else{
                 let clock = AlarmView(frame: UIScreen.main.bounds)
-                clock.setIndex(index: indexPath.row)
+                clock.setIndex(index: indexArray)
                 clock.setControl(theControl: theControl)
-                self.addSubview(clock)
                 alarmList.append(clock)
+                indexArray = indexArray + 1
+                alarmTable.beginUpdates()
+                alarmTable.insertRows(at: [IndexPath(row: alarmList.count - 1, section: 0)], with: .automatic)
+                alarmTable.endUpdates()
             }
             
         }
@@ -76,7 +86,7 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
         
         if tableView == self.alarmTable {
             cell = tableView.dequeueReusableCell(withIdentifier: "AlarmCell", for: indexPath as IndexPath)
-            cell.textLabel!.text = "Alarm View"
+            cell.textLabel!.text = "Enter new event alarm "
             
         }
         
@@ -93,7 +103,7 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
     
     private func setupButtons() {
 
-        buttonEvent.backgroundColor = .blue
+        buttonEvent.backgroundColor = .gray
         //buttonEvent.layer.cornerRadius = 5
         buttonEvent.setTitleColor(.black, for: .normal)
         buttonEvent.setTitle("Events", for: .normal)
@@ -110,10 +120,10 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
     
     @objc func changeToEvent(sender: UIButton!)
     {
-        if(sender.backgroundColor == .blue)
+        if(sender.backgroundColor == .gray)
         {
             sender.backgroundColor = .white
-            buttonAlarm.backgroundColor = .blue
+            buttonAlarm.backgroundColor = .gray
             alarmTable.removeFromSuperview()
             self.addSubview(eventTable)
         }
@@ -122,14 +132,21 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
     
     @objc func changeToAlarm(sender: UIButton!)
     {
-        if(sender.backgroundColor == .blue)
+        if(sender.backgroundColor == .gray)
         {
             sender.backgroundColor = .white
-            buttonEvent.backgroundColor = .blue
+            buttonEvent.backgroundColor = .gray
             eventTable.removeFromSuperview()
             self.addSubview(alarmTable)
         }
 
+    }
+    
+    func saved(theIndex index: Int, clock theTime: time) {
+        alarmList[index].removeFromSuperview()
+        alarmTable.cellForRow(at: IndexPath(row: index, section: 0))?.textLabel?.text = alarmList[index].EventName + " \(theTime.hour):\(theTime.min):\(theTime.sec) \(theTime.timeDay)"
+
+        
     }
     
     

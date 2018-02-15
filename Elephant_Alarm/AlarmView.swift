@@ -23,16 +23,14 @@ class AlarmView : UIView, UITextFieldDelegate
     }
     var seconds: Int = 0
     var Week_Day = Alarm_Days.Monday
-    var alarmHour : Int = 0
-    var alarmMinute : Int = 0
-    var alarmSec : Int = 0
     var duration : Int = 0
     var TimeZone = Alarm_Time_Zone.Mountain
     var secondsAdded: Int = 0
     var minutesAdded : Int = 0
-    var EventField: UITextField = UITextField (frame: CGRect(x: 0, y: 550, width: UIScreen.main.bounds.width, height: 50));
+    var EventField: UITextField = UITextField (frame: CGRect(x: 0, y: 105, width: UIScreen.main.bounds.width, height: 50));
     var index: Int = 0;
     var theControl: Control? = nil
+    var EventName = ""
     
     
     
@@ -82,7 +80,7 @@ class AlarmView : UIView, UITextFieldDelegate
     func addClock()
     {
         
-        alarmHour = seconds/3600
+        /*alarmHour = seconds/3600
         alarmMinute = seconds % 3600/60
         alarmSec = seconds%60
         var addZeroMin: String = ""
@@ -116,7 +114,9 @@ class AlarmView : UIView, UITextFieldDelegate
         if(alarmSec < 10)
         {
             addZeroSec = "0"
-        }
+        }*/
+        
+        var theTime : time = (theControl?.getTime(secs: seconds))!
 
         
         let red: CGFloat = 195/255
@@ -149,7 +149,7 @@ class AlarmView : UIView, UITextFieldDelegate
                           NSAttributedStringKey.foregroundColor : UIColor.init(red: red, green: green, blue: blue, alpha: 1),
                           ]
         
-        let myText = "\(addZeroHour)\(alarmHour):\(addZeroMin)\(alarmMinute):\(addZeroSec)\(alarmSec) \(timeOfDay)"
+        let myText = "\(theTime.hour):\(theTime.min):\(theTime.sec) \(theTime.timeDay)"
         let attrString = NSAttributedString(string: myText,
                                             attributes: attributes)
         
@@ -498,7 +498,6 @@ class AlarmView : UIView, UITextFieldDelegate
         case Alarm_Time_Zone.Eastern  :
             TimeZone = Alarm_Time_Zone.Hawaii
             break
-        default: break
         }
         addClock()
     }
@@ -525,7 +524,6 @@ class AlarmView : UIView, UITextFieldDelegate
         case Alarm_Time_Zone.Eastern  :
             TimeZone = Alarm_Time_Zone.Central
             break
-        default: break
         }
         addClock()
     }
@@ -554,7 +552,6 @@ class AlarmView : UIView, UITextFieldDelegate
         case Alarm_Days.Friday :
             Week_Day = Alarm_Days.Saturday
             break
-        default: break
         }
         addClock()
     }
@@ -583,14 +580,13 @@ class AlarmView : UIView, UITextFieldDelegate
         case Alarm_Days.Friday :
             Week_Day = Alarm_Days.Thursday
             break
-        default: break
         }
         addClock()
     }
     @objc func save(sender: UIButton!)
     {
-        print("Day: \(Week_Day) TimeZone: \(TimeZone) Seconds: \(seconds) Event: \(EventField.text!)")
-        theControl?.alarmSaved(AlarmIndex: index)
+        EventName = "\(EventField.text!)"
+        theControl?.alarmSaved(AlarmIndex: index, secs: seconds)
         
     }
     
