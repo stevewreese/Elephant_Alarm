@@ -35,5 +35,14 @@ class Control
     {
         return theModel.calcTime(seconds: secs)
     }
+    
+    func export(theViews: Array<AlarmView>)
+    {
+        theModel.export(views: theViews)
+    }
+    func startUp() -> Array<imported>
+    {
+        return theModel.startUp()
+    }
 
 }

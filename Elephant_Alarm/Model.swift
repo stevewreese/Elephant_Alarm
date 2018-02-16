@@ -15,12 +15,27 @@ struct time {
     var timeDay: String = ""
     
 }
+struct imported
+{
+    var label: String
+    var time: String
+    init(label: String, time: String)
+    {
+        self.label = label
+        self.time = time
+    }
+}
+
+
 
 class Model
 {
+    let documentsPath: String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+    var filePath: String = ""
+    
     init()
     {
-        
+        filePath = documentsPath + "/file.txt"
     }
     
     func calcTime(seconds : Int) -> time
@@ -66,6 +81,43 @@ class Model
         theTime.sec = "\(addZeroSec)\(alarmSec)"
         theTime.timeDay = timeOfDay
         return theTime
+    }
+    
+    func export(views: Array<AlarmView>)
+    {
+        var toExport: String = ""
+        for view in views {
+            toExport = "\(toExport)\(view.EventName)_\(view.seconds)#"
+            
+
+            
+        }
+        print(toExport)
+        let theNSExport: NSString = toExport as NSString
+        print(theNSExport)
+        try! theNSExport.write(toFile: filePath, atomically: false, encoding: String.Encoding.utf8.rawValue)
+
+    }
+    
+    func startUp() ->Array<imported>
+    {
+        let listener: NSString = try! NSString.init(contentsOfFile: filePath, encoding: String.Encoding.utf8.rawValue)
+        let items = listener.components(separatedBy: "#")
+        var importList : Array<imported> = Array()
+        for item in items{
+            
+            let comp = item.components(separatedBy: "_")
+            if(comp.count > 1)
+            {
+                var importStuff = imported(label: comp[0], time: comp[1])
+                print("Cat heard \(comp[0])")
+                print("Cat heard \(comp[1])")
+                importList.append(importStuff)
+            }
+
+        }
+        return importList
+        
     }
 }
 

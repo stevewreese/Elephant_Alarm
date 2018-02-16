@@ -19,6 +19,7 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
     let height = UIScreen.main.bounds.height
     let buttonEvent = UIButton(frame: CGRect(x: 75, y: 50, width: 100, height: 50))
     let buttonAlarm = UIButton(frame: CGRect(x: 275, y: 50, width: 100, height: 50))
+    let buttonClose = UIButton(frame: CGRect(x: 25, y: 25, width: 50, height: 20))
     var alarmList : Array<AlarmView> = Array()
     var theControl = Control();
     var indexArray : Int = 0
@@ -116,6 +117,13 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
         buttonAlarm.setTitle("Alarms", for: .normal)
         buttonAlarm.addTarget(self, action: #selector(ViewHolder.changeToAlarm(sender:)), for: .touchUpInside)
         self.addSubview(buttonAlarm)
+        
+        buttonClose.backgroundColor = .white
+        //buttonEvent.layer.cornerRadius = 5
+        buttonClose.setTitleColor(.black, for: .normal)
+        buttonClose.setTitle("Close", for: .normal)
+        buttonClose.addTarget(self, action: #selector(ViewHolder.Close(sender:)), for: .touchUpInside)
+        self.addSubview(buttonClose)
     }
     
     @objc func changeToEvent(sender: UIButton!)
@@ -142,11 +150,27 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
 
     }
     
+    @objc func Close(sender: UIButton!)
+    {
+        UIControl().sendAction(#selector(NSXPCConnection.suspend),
+                              to: UIApplication.shared, for: nil)
+    }
+    
     func saved(theIndex index: Int, clock theTime: time) {
         alarmList[index].removeFromSuperview()
         alarmTable.cellForRow(at: IndexPath(row: index, section: 0))?.textLabel?.text = alarmList[index].EventName + " \(theTime.hour):\(theTime.min):\(theTime.sec) \(theTime.timeDay)"
 
         
+    }
+    
+    func export()
+    {
+        theControl.export(theViews: alarmList)
+    }
+    
+    func startUp()
+    {
+        theControl.startUp()
     }
     
     
