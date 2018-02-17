@@ -50,6 +50,10 @@ class AlarmView : UIView, UITextFieldDelegate
         EventField.delegate = self
         EventField.borderStyle = UITextBorderStyle.roundedRect
         EventField.allowsEditingTextAttributes = true
+        if(EventName != "")
+        {
+            EventField.text = EventName
+        }
         self.addSubview(EventField)
         
     }
@@ -563,7 +567,7 @@ class AlarmView : UIView, UITextFieldDelegate
             Week_Day = Alarm_Days.Friday
             break
         case Alarm_Days.Sunday  :
-            Week_Day = Alarm_Days.Monday
+            Week_Day = Alarm_Days.Saturday
             break
         case Alarm_Days.Monday :
             Week_Day = Alarm_Days.Sunday

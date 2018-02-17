@@ -44,5 +44,10 @@ class Control
     {
         return theModel.startUp()
     }
+    
+    func alarmsTriggered(theViews: Array<AlarmView>) -> Array<String>
+    {
+        return theModel.checkAlarms(views: theViews)
+    }
 
 }

@@ -18,10 +18,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         mainWindow.backgroundColor = UIColor.white
         mainWindow.rootViewController = UIViewController()
-        rootView.startUp()
-        
-        
+        rootView.populateTable()
         rootView.backgroundColor = UIColor.darkGray
+        
         
         mainWindow.rootViewController?.view = rootView
         mainWindow.makeKeyAndVisible()
@@ -42,7 +41,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-        rootView.startUp()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {

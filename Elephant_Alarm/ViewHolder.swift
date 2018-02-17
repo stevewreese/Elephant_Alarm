@@ -23,14 +23,22 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
     var alarmList : Array<AlarmView> = Array()
     var theControl = Control();
     var indexArray : Int = 0
+    var inputOfViews: Array<imported>? = nil
+    var eventlist: Array<String>? = nil
     
     override init(frame: CGRect)
     {
         super.init(frame: frame)
+        startUp()
+        loadData()
+        alarmsTriggered()
+        
         alarmTable = UITableView(frame: CGRect(x: 0, y: 100, width: width, height: height - 100))
         alarmTable.register(UITableViewCell.self, forCellReuseIdentifier: "AlarmCell")
         alarmTable.dataSource = self
         alarmTable.delegate = self
+        
+        
         
         eventTable = UITableView(frame: CGRect(x: 0, y: 100, width: width, height: height - 100))
         eventTable.register(UITableViewCell.self, forCellReuseIdentifier: "EventCell")
@@ -38,6 +46,7 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
         eventTable.delegate = self
         
         self.addSubview(alarmTable)
+        
         
         setupButtons()
         theControl.delegate = self
@@ -59,7 +68,7 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
             return alarmList.count
         }
         else{
-            return 1
+            return eventlist!.count
         }
     }
     
@@ -170,7 +179,54 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
     
     func startUp()
     {
-        theControl.startUp()
+        inputOfViews = theControl.startUp()
+    }
+    
+    func loadData()
+    {
+        for view in inputOfViews!
+        {
+            if(view.label == "")
+            {
+
+            }
+            else
+            {
+                let clock = AlarmView(frame: UIScreen.main.bounds)
+                clock.setIndex(index: indexArray)
+                clock.setControl(theControl: theControl)
+                clock.seconds = Int(view.time)!
+                clock.EventField.text = view.label
+                clock.EventName = view.label
+                alarmList.append(clock)
+                indexArray = indexArray + 1
+            }
+        }
+        
+ 
+        
+        
+    }
+    
+    func populateTable()
+    {
+        for alarm in alarmList
+        {
+            var theTime : time = theControl.getTime(secs: alarm.seconds)
+            print(alarm.EventName + " \(theTime.hour):\(theTime.min):\(theTime.sec) \(theTime.timeDay) index \(alarm.index)")
+            if(alarm.EventName != "")
+            {
+                print("here")
+                alarmTable.cellForRow(at: IndexPath(row: alarm.index, section: 0))?.textLabel?.text = alarm.EventName + " \(theTime.hour):\(theTime.min):\(theTime.sec) \(theTime.timeDay)"
+            }
+
+        }
+        
+    }
+    
+    func alarmsTriggered()
+    {
+        eventlist = theControl.alarmsTriggered(theViews: alarmList)
     }
     
     
