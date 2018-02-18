@@ -39,7 +39,7 @@ class AlarmView : UIView, UITextFieldDelegate
     override init(frame: CGRect)
     {
         super.init(frame: frame)
-        self.backgroundColor = .blue
+        self.backgroundColor = .darkGray
         setupButtons()
         
         let placeText = "Add event name here"
@@ -597,6 +597,36 @@ class AlarmView : UIView, UITextFieldDelegate
     func setControl(theControl: Control)
     {
         self.theControl = theControl
+    }
+    
+    func changeDay(day: String)
+    {
+        switch(day) {
+        case "Friday" :
+            Week_Day = Alarm_Days.Friday
+            break
+        case "Saturday"  :
+            Week_Day = Alarm_Days.Saturday
+            break
+        case "Sunday" :
+            Week_Day = Alarm_Days.Sunday
+            break
+        case "Monday"  :
+            Week_Day = Alarm_Days.Monday
+            break
+        case "Tuesday" :
+            Week_Day = Alarm_Days.Tuesday
+            break
+        case "Wednesday" :
+            Week_Day = Alarm_Days.Wednesday
+            break
+        case "Thursday" :
+            Week_Day = Alarm_Days.Thursday
+            break
+        default:
+            Week_Day = Alarm_Days.Monday
+            break
+        }
     }
     
     

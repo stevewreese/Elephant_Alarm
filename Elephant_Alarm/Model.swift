@@ -19,10 +19,12 @@ struct imported
 {
     var label: String
     var time: String
-    init(label: String, time: String)
+    var day: String
+    init(label: String, time: String, day: String)
     {
         self.label = label
         self.time = time
+        self.day = day
     }
 }
 
@@ -87,7 +89,7 @@ class Model
     {
         var toExport: String = ""
         for view in views {
-            toExport = "\(toExport)\(view.EventName)_\(view.seconds)#"
+            toExport = "\(toExport)\(view.EventName)_\(view.seconds)_\(view.Week_Day)#"
         }
         print(toExport)
         let theNSExport: NSString = toExport as NSString
@@ -106,7 +108,7 @@ class Model
             let comp = item.components(separatedBy: "_")
             if(comp.count > 1)
             {
-                var importStuff = imported(label: comp[0], time: comp[1])
+                var importStuff = imported(label: comp[0], time: comp[1], day: comp[2])
                 print("Cat heard \(comp[0])")
                 print("Cat heard \(comp[1])")
                 importList.append(importStuff)

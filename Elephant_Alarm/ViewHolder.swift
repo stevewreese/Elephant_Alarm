@@ -96,13 +96,14 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
         
         if tableView == self.alarmTable {
             cell = tableView.dequeueReusableCell(withIdentifier: "AlarmCell", for: indexPath as IndexPath)
-            cell.textLabel!.text = "Enter new event alarm "
+            cell.textLabel!.text = alarmList[indexPath.row].EventName
+                //alarm.EventName + " \(theTime.hour):\(theTime.min):\(theTime.sec) \(theTime.timeDay)"
             
         }
         
         if tableView == self.eventTable {
             cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath as IndexPath)
-            cell!.textLabel!.text = "Event View"
+            cell!.textLabel!.text = eventlist?[indexPath.row]
             
         }
         
@@ -198,6 +199,7 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
                 clock.seconds = Int(view.time)!
                 clock.EventField.text = view.label
                 clock.EventName = view.label
+                clock.changeDay(day: view.day)
                 alarmList.append(clock)
                 indexArray = indexArray + 1
             }
