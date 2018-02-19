@@ -20,15 +20,22 @@ struct imported
     var label: String
     var time: String
     var day: String
+<<<<<<< HEAD
     var zone: String
     var repeating: Int
     init(label: String, time: String, day: String, zone: String, repeating: Int)
+=======
+    init(label: String, time: String, day: String)
+>>>>>>> origin/master
     {
         self.label = label
         self.time = time
         self.day = day
+<<<<<<< HEAD
         self.zone = zone
         self.repeating = repeating
+=======
+>>>>>>> origin/master
     }
 }
 
@@ -93,7 +100,11 @@ class Model
     {
         var toExport: String = ""
         for view in views {
+<<<<<<< HEAD
             toExport = "\(toExport)\(view.EventName)_\(view.seconds)_\(view.Week_Day)_\(view.TimeZone)_\(view.repeatVal)#"
+=======
+            toExport = "\(toExport)\(view.EventName)_\(view.seconds)_\(view.Week_Day)#"
+>>>>>>> origin/master
         }
         print(toExport)
         let theNSExport: NSString = toExport as NSString
@@ -113,6 +124,7 @@ class Model
             if(comp.count > 1)
             {
                 var importStuff = imported(label: comp[0], time: comp[1], day: comp[2], zone: comp[3], repeating: Int (comp[4])!)
+
                 importList.append(importStuff)
             }
 

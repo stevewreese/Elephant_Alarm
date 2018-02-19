@@ -741,6 +741,7 @@ class AlarmView : UIView, UITextFieldDelegate
         }
     }
     
+
     func setZone(zone: String)
     {
         //Hawaii, Alaska, Pacific, Mountain, Central, Eastern
@@ -783,6 +784,7 @@ class AlarmView : UIView, UITextFieldDelegate
         let buttonFri = UIButton(frame: CGRect(x: 275, y: 167, width: 50, height: 25))
         let buttonSa*/
     }
+
     
 
 
