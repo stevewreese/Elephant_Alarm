@@ -96,13 +96,21 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
         
         if tableView == self.alarmTable {
             cell = tableView.dequeueReusableCell(withIdentifier: "AlarmCell", for: indexPath as IndexPath)
-            cell.textLabel!.text = "Enter new event alarm "
+            if(alarmList[indexPath.row].EventName != "")
+            {
+                var theTime : time = theControl.getTime(secs: alarmList[indexPath.row].seconds)
+                cell.textLabel!.text = alarmList[indexPath.row].EventName + " \(alarmList[indexPath.row].Week_Day) \(theTime.hour):\(theTime.min):\(theTime.sec) \(theTime.timeDay)"
+            }
+            else
+            {
+                cell.textLabel!.text = "Enter New Alarm here"
+            }
             
         }
         
         if tableView == self.eventTable {
             cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath as IndexPath)
-            cell!.textLabel!.text = "Event View"
+            cell!.textLabel!.text = eventlist?[indexPath.row]
             
         }
         
@@ -168,6 +176,7 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
     func saved(theIndex index: Int, clock theTime: time) {
         alarmList[index].removeFromSuperview()
         alarmTable.cellForRow(at: IndexPath(row: index, section: 0))?.textLabel?.text = alarmList[index].EventName + " \(theTime.hour):\(theTime.min):\(theTime.sec) \(theTime.timeDay)"
+        export()
 
         
     }
@@ -195,9 +204,13 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
                 let clock = AlarmView(frame: UIScreen.main.bounds)
                 clock.setIndex(index: indexArray)
                 clock.setControl(theControl: theControl)
+                print("time given: \(Int(view.time)!)")
                 clock.seconds = Int(view.time)!
                 clock.EventField.text = view.label
                 clock.EventName = view.label
+                clock.changeDay(day: view.day)
+                clock.setZone(zone: view.zone)
+                clock.setRepeat(repeatValue: view.repeating)
                 alarmList.append(clock)
                 indexArray = indexArray + 1
             }
@@ -208,21 +221,6 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
         
     }
     
-    func populateTable()
-    {
-        for alarm in alarmList
-        {
-            var theTime : time = theControl.getTime(secs: alarm.seconds)
-            print(alarm.EventName + " \(theTime.hour):\(theTime.min):\(theTime.sec) \(theTime.timeDay) index \(alarm.index)")
-            if(alarm.EventName != "")
-            {
-                print("here")
-                alarmTable.cellForRow(at: IndexPath(row: alarm.index, section: 0))?.textLabel?.text = alarm.EventName + " \(theTime.hour):\(theTime.min):\(theTime.sec) \(theTime.timeDay)"
-            }
-
-        }
-        
-    }
     
     func alarmsTriggered()
     {

@@ -18,7 +18,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         mainWindow.backgroundColor = UIColor.white
         mainWindow.rootViewController = UIViewController()
-        rootView.populateTable()
         rootView.backgroundColor = UIColor.darkGray
         
         

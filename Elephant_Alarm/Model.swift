@@ -19,10 +19,16 @@ struct imported
 {
     var label: String
     var time: String
-    init(label: String, time: String)
+    var day: String
+    var zone: String
+    var repeating: Int
+    init(label: String, time: String, day: String, zone: String, repeating: Int)
     {
         self.label = label
         self.time = time
+        self.day = day
+        self.zone = zone
+        self.repeating = repeating
     }
 }
 
@@ -87,7 +93,7 @@ class Model
     {
         var toExport: String = ""
         for view in views {
-            toExport = "\(toExport)\(view.EventName)_\(view.seconds)#"
+            toExport = "\(toExport)\(view.EventName)_\(view.seconds)_\(view.Week_Day)_\(view.TimeZone)_\(view.repeatVal)#"
         }
         print(toExport)
         let theNSExport: NSString = toExport as NSString
@@ -106,9 +112,7 @@ class Model
             let comp = item.components(separatedBy: "_")
             if(comp.count > 1)
             {
-                var importStuff = imported(label: comp[0], time: comp[1])
-                print("Cat heard \(comp[0])")
-                print("Cat heard \(comp[1])")
+                var importStuff = imported(label: comp[0], time: comp[1], day: comp[2], zone: comp[3], repeating: Int (comp[4])!)
                 importList.append(importStuff)
             }
 
@@ -120,14 +124,44 @@ class Model
     func checkAlarms(views: Array<AlarmView>) -> Array<String>
     {
         var eventlist: Array<String> = Array()
+        var result : String = ""
         for view in views
         {
             if(checkClock(view: view))
             {
-                eventlist.append(view.EventName)
+                let theTime = calcTime(seconds: view.seconds)
+                result = "\(view.EventName) \(view.Week_Day) \(theTime.hour):\(theTime.min):\(theTime.sec) \(theTime.timeDay) times fired: \(timesAlerted(view: view))"
+                eventlist.append(result)
             }
         }
         return eventlist
+    }
+    
+    func timesAlerted(view: AlarmView)-> Int
+    {
+        let date = Date()
+        let calendar = Calendar.current
+        var hour = calendar.component(.hour, from: date as Date)
+        hour = changeTimeZone(time: hour, zone: "\(view.TimeZone)")
+        let minutes = calendar.component(.minute, from: date as Date)
+        let day = calendar.component(.weekday, from: date as Date)
+        let alarmDay = getDayNumber(day: "\(view.Week_Day)")
+        let hourView = view.seconds/3600
+        let minView = view.seconds/3600/60
+        if(view.repeatVal == 0)
+        {
+            return 1
+        }
+        else if(view.repeatVal == 1)
+        {
+            return (hour - hourView) + 1
+        }
+        else
+        {
+            return ((minutes + hour*60) - (minView + hourView*60)) + 1
+        }
+        
+        
     }
     
     func checkClock(view: AlarmView) -> Bool

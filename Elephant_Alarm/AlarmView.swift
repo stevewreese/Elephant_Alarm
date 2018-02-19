@@ -22,15 +22,27 @@ class AlarmView : UIView, UITextFieldDelegate
         case Hawaii, Alaska, Pacific, Mountain, Central, Eastern
     }
     var seconds: Int = 0
-    var Week_Day = Alarm_Days.Monday
+    var Week_Day = Alarm_Days.Sunday
+    var days : [Int] = [1, 0, 0, 0, 0, 0, 0]
     var duration : Int = 0
     var TimeZone = Alarm_Time_Zone.Mountain
     var secondsAdded: Int = 0
     var minutesAdded : Int = 0
     var EventField: UITextField = UITextField (frame: CGRect(x: 0, y: 105, width: UIScreen.main.bounds.width, height: 50));
+    let buttonRepeatDay = UIButton(frame: CGRect(x: 50, y: 360, width: 100, height: 25))
+    let buttonRepeatHour = UIButton(frame: CGRect(x: 150, y: 360, width: 100, height: 25))
+    let buttonRepeatMin = UIButton(frame: CGRect(x: 250, y: 360, width: 100, height: 25))
+    let buttonSun = UIButton(frame: CGRect(x: 25, y: 167, width: 50, height: 25))
+    let buttonMon = UIButton(frame: CGRect(x: 75, y: 167, width: 50, height: 25))
+    let buttonTues = UIButton(frame: CGRect(x: 125, y: 167, width: 50, height: 25))
+    let buttonWed = UIButton(frame: CGRect(x: 175, y: 167, width: 50, height: 25))
+    let buttonThurs = UIButton(frame: CGRect(x: 225, y: 167, width: 50, height: 25))
+    let buttonFri = UIButton(frame: CGRect(x: 275, y: 167, width: 50, height: 25))
+    let buttonSat = UIButton(frame: CGRect(x: 325, y: 167, width: 50, height: 25))
     var index: Int = 0;
     var theControl: Control? = nil
     var EventName = ""
+    var repeatVal = 0
     
     
     
@@ -39,7 +51,7 @@ class AlarmView : UIView, UITextFieldDelegate
     override init(frame: CGRect)
     {
         super.init(frame: frame)
-        self.backgroundColor = .blue
+        self.backgroundColor = .darkGray
         setupButtons()
         
         let placeText = "Add event name here"
@@ -84,41 +96,7 @@ class AlarmView : UIView, UITextFieldDelegate
     func addClock()
     {
         
-        /*alarmHour = seconds/3600
-        alarmMinute = seconds % 3600/60
-        alarmSec = seconds%60
-        var addZeroMin: String = ""
-        var addZeroHour: String = ""
-        var addZeroSec: String = ""
-        var timeOfDay: String = ""
-        if(alarmHour > 12)
-        {
-            timeOfDay = "PM"
-            alarmHour = alarmHour - 12
-        }
-        else if(alarmHour == 12)
-        {
-            timeOfDay = "PM"
-        }
-        else{
-            timeOfDay = "AM"
-            if(alarmHour == 0)
-            {
-                alarmHour = 12
-            }
-        }
-        if(alarmMinute < 10)
-        {
-            addZeroMin = "0"
-        }
-        if(alarmHour < 10)
-        {
-            addZeroHour = "0"
-        }
-        if(alarmSec < 10)
-        {
-            addZeroSec = "0"
-        }*/
+
         
         var theTime : time = (theControl?.getTime(secs: seconds))!
 
@@ -128,7 +106,7 @@ class AlarmView : UIView, UITextFieldDelegate
         let blue: CGFloat = 4/255
         let rtDay = CGRect(x: 110, y: 167, width: 200, height: 40)
         
-        let paragraphStyleDay = NSMutableParagraphStyle()
+        /*let paragraphStyleDay = NSMutableParagraphStyle()
         paragraphStyleDay.alignment = .center
         let attributesDay = [NSAttributedStringKey.paragraphStyle  :  paragraphStyleDay,
                              NSAttributedStringKey.font            :   UIFont.systemFont(ofSize: 35.0),
@@ -141,7 +119,7 @@ class AlarmView : UIView, UITextFieldDelegate
         
         
         attrStringDay.draw(in: rtDay)
-        setNeedsDisplay(rtDay)
+        setNeedsDisplay(rtDay)*/
         
         let rt = CGRect(x: 100, y: 253, width: 225, height: 40)
         let paragraphStyle = NSMutableParagraphStyle()
@@ -161,7 +139,7 @@ class AlarmView : UIView, UITextFieldDelegate
         attrString.draw(in: rt)
         setNeedsDisplay(rt)
         
-        let rtDuration = CGRect(x: 105, y: 360, width: 225, height: 40)
+        /*let rtDuration = CGRect(x: 105, y: 360, width: 225, height: 40)
         let paragraphStyleDuration = NSMutableParagraphStyle()
         paragraphStyleDuration.alignment = .center
         
@@ -176,7 +154,7 @@ class AlarmView : UIView, UITextFieldDelegate
         
         
         attrStringDuration.draw(in: rtDuration)
-        setNeedsDisplay(rtDuration)
+        setNeedsDisplay(rtDuration)*/
         
         let rtZone = CGRect(x: 95, y: 450, width: 225, height: 40)
         let paragraphStyleZone = NSMutableParagraphStyle()
@@ -211,7 +189,7 @@ class AlarmView : UIView, UITextFieldDelegate
         self.addSubview(saveButton)
         
         //day Buttons
-        let buttonChangeNextDay = UIButton(frame: CGRect(x: xBase + 220, y: yBase - 50, width: 25, height: 25))
+       /* let buttonChangeNextDay = UIButton(frame: CGRect(x: xBase + 220, y: yBase - 50, width: 25, height: 25))
         buttonChangeNextDay.backgroundColor = .cyan
         buttonChangeNextDay.layer.cornerRadius = 5
         buttonChangeNextDay.setTitleColor(.black, for: .normal)
@@ -225,7 +203,7 @@ class AlarmView : UIView, UITextFieldDelegate
         buttonChangePrevDay.setTitleColor(.black, for: .normal)
         buttonChangePrevDay.setTitle("-", for: .normal)
         buttonChangePrevDay.addTarget(self, action: #selector(AlarmView.changePrevDay(sender:)), for: .touchUpInside)
-        self.addSubview(buttonChangePrevDay)
+        self.addSubview(buttonChangePrevDay)*/
         
         //Time zone Buttons
         let buttonChangeNextZone = UIButton(frame: CGRect(x: xBase - 40, y: yBase + 233, width: 25, height: 25))
@@ -318,7 +296,7 @@ class AlarmView : UIView, UITextFieldDelegate
         self.addSubview(buttonPMAM)
         
         //Duration Buttons
-        let buttonAddDur = UIButton(frame: CGRect(x: xBase + 175, y: yBase + 110, width: 25, height: 25))
+        /*let buttonAddDur = UIButton(frame: CGRect(x: xBase + 175, y: yBase + 110, width: 25, height: 25))
         buttonAddDur.layer.cornerRadius = 5
         buttonAddDur.backgroundColor = .cyan
         buttonAddDur.setTitleColor(.black, for: .normal)
@@ -334,7 +312,91 @@ class AlarmView : UIView, UITextFieldDelegate
         buttonMinusDur.setTitle("-", for: .normal)
         buttonMinusDur.addTarget(self, action: #selector(AlarmView.subSecondDur(sender:)), for: .touchUpInside)
         
-        self.addSubview(buttonMinusDur)
+        self.addSubview(buttonMinusDur)*/
+        
+        
+        buttonRepeatDay.layer.cornerRadius = 5
+        buttonRepeatDay.backgroundColor = .cyan
+        buttonRepeatDay.setTitleColor(.black, for: .normal)
+        buttonRepeatDay.setTitle("Once", for: .normal)
+        buttonRepeatDay.addTarget(self, action: #selector(AlarmView.repeatSet(sender:)), for: .touchUpInside)
+        
+        self.addSubview(buttonRepeatDay)
+        
+        buttonRepeatHour.layer.cornerRadius = 5
+        buttonRepeatHour.backgroundColor = .white
+        buttonRepeatHour.setTitleColor(.black, for: .normal)
+        buttonRepeatHour.setTitle("Hourly", for: .normal)
+        buttonRepeatHour.addTarget(self, action: #selector(AlarmView.repeatSet(sender:)), for: .touchUpInside)
+        
+        self.addSubview(buttonRepeatHour)
+        
+        
+        buttonRepeatMin.layer.cornerRadius = 5
+        buttonRepeatMin.backgroundColor = .white
+        buttonRepeatMin.setTitleColor(.black, for: .normal)
+        buttonRepeatMin.setTitle("Every Minute", for: .normal)
+        buttonRepeatMin.addTarget(self, action: #selector(AlarmView.repeatSet(sender:)), for: .touchUpInside)
+        
+        self.addSubview(buttonRepeatMin)
+        
+        
+        
+        buttonSun.layer.cornerRadius = 5
+        buttonSun.backgroundColor = .cyan
+        buttonSun.setTitleColor(.black, for: .normal)
+        buttonSun.setTitle("SU", for: .normal)
+        buttonSun.addTarget(self, action: #selector(AlarmView.repeatSet(sender:)), for: .touchUpInside)
+        
+        self.addSubview(buttonSun)
+        
+        buttonMon.layer.cornerRadius = 5
+        buttonMon.backgroundColor = .cyan
+        buttonMon.setTitleColor(.black, for: .normal)
+        buttonMon.setTitle("M", for: .normal)
+        buttonMon.addTarget(self, action: #selector(AlarmView.repeatSet(sender:)), for: .touchUpInside)
+        
+        self.addSubview(buttonMon)
+        
+        buttonTues.layer.cornerRadius = 5
+        buttonTues.backgroundColor = .cyan
+        buttonTues.setTitleColor(.black, for: .normal)
+        buttonTues.setTitle("TU", for: .normal)
+        buttonTues.addTarget(self, action: #selector(AlarmView.repeatSet(sender:)), for: .touchUpInside)
+        
+        self.addSubview(buttonTues)
+        
+        buttonWed.layer.cornerRadius = 5
+        buttonWed.backgroundColor = .cyan
+        buttonWed.setTitleColor(.black, for: .normal)
+        buttonWed.setTitle("W", for: .normal)
+        buttonWed.addTarget(self, action: #selector(AlarmView.repeatSet(sender:)), for: .touchUpInside)
+        
+        self.addSubview(buttonWed)
+        
+        buttonThurs.layer.cornerRadius = 5
+        buttonThurs.backgroundColor = .cyan
+        buttonThurs.setTitleColor(.black, for: .normal)
+        buttonThurs.setTitle("TH", for: .normal)
+        buttonThurs.addTarget(self, action: #selector(AlarmView.repeatSet(sender:)), for: .touchUpInside)
+        
+        self.addSubview(buttonThurs)
+        
+        buttonFri.layer.cornerRadius = 5
+        buttonFri.backgroundColor = .cyan
+        buttonFri.setTitleColor(.black, for: .normal)
+        buttonFri.setTitle("F", for: .normal)
+        buttonFri.addTarget(self, action: #selector(AlarmView.repeatSet(sender:)), for: .touchUpInside)
+        
+        self.addSubview(buttonFri)
+        
+        buttonSat.layer.cornerRadius = 5
+        buttonSat.backgroundColor = .cyan
+        buttonSat.setTitleColor(.black, for: .normal)
+        buttonSat.setTitle("SA", for: .normal)
+        buttonSat.addTarget(self, action: #selector(AlarmView.repeatSet(sender:)), for: .touchUpInside)
+        
+        self.addSubview(buttonSat)
         
         
     }
@@ -560,6 +622,56 @@ class AlarmView : UIView, UITextFieldDelegate
         addClock()
     }
     
+    @objc func repeatSet(sender: UIButton!)
+    {
+        if(sender.titleLabel?.text == "Once")
+        {
+            repeatVal = 0
+            buttonRepeatDay.backgroundColor = .cyan
+            buttonRepeatHour.backgroundColor = .white
+            buttonRepeatMin.backgroundColor = .white
+        }
+        else if(sender.titleLabel?.text == "Hourly")
+        {
+            repeatVal = 1
+            buttonRepeatDay.backgroundColor = .white
+            buttonRepeatHour.backgroundColor = .cyan
+            buttonRepeatMin.backgroundColor = .white
+        }
+        else
+        {
+            repeatVal = 2
+            buttonRepeatDay.backgroundColor = .white
+            buttonRepeatHour.backgroundColor = .white
+            buttonRepeatMin.backgroundColor = .cyan
+        }
+    }
+    
+    func setRepeat(repeatValue: Int)
+    {
+        if(repeatValue == 0)
+        {
+            repeatVal = 0
+            buttonRepeatDay.backgroundColor = .cyan
+            buttonRepeatHour.backgroundColor = .white
+            buttonRepeatMin.backgroundColor = .white
+        }
+        else if(repeatValue == 1)
+        {
+            repeatVal = 1
+            buttonRepeatDay.backgroundColor = .white
+            buttonRepeatHour.backgroundColor = .cyan
+            buttonRepeatMin.backgroundColor = .white
+        }
+        else
+        {
+            repeatVal = 2
+            buttonRepeatDay.backgroundColor = .white
+            buttonRepeatHour.backgroundColor = .white
+            buttonRepeatMin.backgroundColor = .cyan
+        }
+    }
+    
     @objc func changePrevDay(sender: UIButton!)
     {
         switch(Week_Day) {
@@ -599,6 +711,78 @@ class AlarmView : UIView, UITextFieldDelegate
         self.theControl = theControl
     }
     
+    func changeDay(day: String)
+    {
+        switch(day) {
+        case "Friday" :
+            Week_Day = Alarm_Days.Friday
+            break
+        case "Saturday"  :
+            Week_Day = Alarm_Days.Saturday
+            break
+        case "Sunday" :
+            Week_Day = Alarm_Days.Sunday
+            break
+        case "Monday"  :
+            Week_Day = Alarm_Days.Monday
+            break
+        case "Tuesday" :
+            Week_Day = Alarm_Days.Tuesday
+            break
+        case "Wednesday" :
+            Week_Day = Alarm_Days.Wednesday
+            break
+        case "Thursday" :
+            Week_Day = Alarm_Days.Thursday
+            break
+        default:
+            Week_Day = Alarm_Days.Monday
+            break
+        }
+    }
+    
+    func setZone(zone: String)
+    {
+        //Hawaii, Alaska, Pacific, Mountain, Central, Eastern
+        switch(zone) {
+        case "Hawaii" :
+            TimeZone = Alarm_Time_Zone.Hawaii
+            break
+        case "Alaska"  :
+            TimeZone = Alarm_Time_Zone.Alaska
+            break
+        case "Pacific" :
+            TimeZone = Alarm_Time_Zone.Pacific
+            break
+        case "Mountain"  :
+            TimeZone = Alarm_Time_Zone.Mountain
+            break
+        case "Central" :
+            TimeZone = Alarm_Time_Zone.Central
+            break
+        case "Eastern"  :
+            TimeZone = Alarm_Time_Zone.Eastern
+            break
+        default:
+            TimeZone = Alarm_Time_Zone.Mountain
+        }
+    }
+    
+    @objc func setDay(sender: UIButton!)
+    {
+        if(sender == buttonSun)
+        {
+            
+        }
+        
+        /*let buttonSun = UIButton(frame: CGRect(x: 25, y: 167, width: 50, height: 25))
+        let buttonMon = UIButton(frame: CGRect(x: 75, y: 167, width: 50, height: 25))
+        let buttonTues = UIButton(frame: CGRect(x: 125, y: 167, width: 50, height: 25))
+        let buttonWed = UIButton(frame: CGRect(x: 175, y: 167, width: 50, height: 25))
+        let buttonThurs = UIButton(frame: CGRect(x: 225, y: 167, width: 50, height: 25))
+        let buttonFri = UIButton(frame: CGRect(x: 275, y: 167, width: 50, height: 25))
+        let buttonSa*/
+    }
     
 
 
