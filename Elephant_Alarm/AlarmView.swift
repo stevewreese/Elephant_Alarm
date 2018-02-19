@@ -351,7 +351,7 @@ class AlarmView : UIView, UITextFieldDelegate
         self.addSubview(buttonSun)
         
         buttonMon.layer.cornerRadius = 5
-        buttonMon.backgroundColor = .cyan
+        buttonMon.backgroundColor = .white
         buttonMon.setTitleColor(.black, for: .normal)
         buttonMon.setTitle("M", for: .normal)
         buttonMon.addTarget(self, action: #selector(AlarmView.repeatSet(sender:)), for: .touchUpInside)
@@ -359,7 +359,7 @@ class AlarmView : UIView, UITextFieldDelegate
         self.addSubview(buttonMon)
         
         buttonTues.layer.cornerRadius = 5
-        buttonTues.backgroundColor = .cyan
+        buttonTues.backgroundColor = .white
         buttonTues.setTitleColor(.black, for: .normal)
         buttonTues.setTitle("TU", for: .normal)
         buttonTues.addTarget(self, action: #selector(AlarmView.repeatSet(sender:)), for: .touchUpInside)
@@ -367,7 +367,7 @@ class AlarmView : UIView, UITextFieldDelegate
         self.addSubview(buttonTues)
         
         buttonWed.layer.cornerRadius = 5
-        buttonWed.backgroundColor = .cyan
+        buttonWed.backgroundColor = .white
         buttonWed.setTitleColor(.black, for: .normal)
         buttonWed.setTitle("W", for: .normal)
         buttonWed.addTarget(self, action: #selector(AlarmView.repeatSet(sender:)), for: .touchUpInside)
@@ -375,7 +375,7 @@ class AlarmView : UIView, UITextFieldDelegate
         self.addSubview(buttonWed)
         
         buttonThurs.layer.cornerRadius = 5
-        buttonThurs.backgroundColor = .cyan
+        buttonThurs.backgroundColor = .white
         buttonThurs.setTitleColor(.black, for: .normal)
         buttonThurs.setTitle("TH", for: .normal)
         buttonThurs.addTarget(self, action: #selector(AlarmView.repeatSet(sender:)), for: .touchUpInside)
@@ -383,7 +383,7 @@ class AlarmView : UIView, UITextFieldDelegate
         self.addSubview(buttonThurs)
         
         buttonFri.layer.cornerRadius = 5
-        buttonFri.backgroundColor = .cyan
+        buttonFri.backgroundColor = .white
         buttonFri.setTitleColor(.black, for: .normal)
         buttonFri.setTitle("F", for: .normal)
         buttonFri.addTarget(self, action: #selector(AlarmView.repeatSet(sender:)), for: .touchUpInside)
@@ -391,7 +391,7 @@ class AlarmView : UIView, UITextFieldDelegate
         self.addSubview(buttonFri)
         
         buttonSat.layer.cornerRadius = 5
-        buttonSat.backgroundColor = .cyan
+        buttonSat.backgroundColor = .white
         buttonSat.setTitleColor(.black, for: .normal)
         buttonSat.setTitle("SA", for: .normal)
         buttonSat.addTarget(self, action: #selector(AlarmView.repeatSet(sender:)), for: .touchUpInside)
@@ -773,7 +773,13 @@ class AlarmView : UIView, UITextFieldDelegate
     {
         if(sender == buttonSun)
         {
-            
+            if(buttonSun.backgroundColor == .cyan)
+            {
+                buttonSun.backgroundColor == .white
+            }
+            else{
+                
+            }
         }
         
         /*let buttonSun = UIButton(frame: CGRect(x: 25, y: 167, width: 50, height: 25))
