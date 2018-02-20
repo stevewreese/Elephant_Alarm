@@ -173,9 +173,9 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
                               to: UIApplication.shared, for: nil)
     }
     
-    func saved(theIndex index: Int, clock theTime: time) {
+    func saved(theIndex index: Int, clock theTime: time, day: String) {
         alarmList[index].removeFromSuperview()
-        alarmTable.cellForRow(at: IndexPath(row: index, section: 0))?.textLabel?.text = alarmList[index].EventName + " \(theTime.hour):\(theTime.min):\(theTime.sec) \(theTime.timeDay)"
+        alarmTable.cellForRow(at: IndexPath(row: index, section: 0))?.textLabel?.text = alarmList[index].EventName + " \(day) \(theTime.hour):\(theTime.min):\(theTime.sec) \(theTime.timeDay)"
         export()
 
         

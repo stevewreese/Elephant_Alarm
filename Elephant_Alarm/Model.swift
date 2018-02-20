@@ -89,17 +89,57 @@ class Model
         return theTime
     }
     
+    func convertDays(days: [String]) -> String
+    {
+        var toReturn = ""
+        for day in days{
+            toReturn = toReturn + day
+        }
+        return toReturn
+    }
+    
     func export(views: Array<AlarmView>)
     {
         var toExport: String = ""
         for view in views {
-            toExport = "\(toExport)\(view.EventName)_\(view.seconds)_\(view.Week_Day)_\(view.TimeZone)_\(view.repeatVal)#"
+            toExport = "\(toExport)\(view.EventName)_\(view.seconds)_\(convertToDigits(days: view.days))_\(view.TimeZone)_\(view.repeatVal)#"
         }
         print(toExport)
         let theNSExport: NSString = toExport as NSString
         print(theNSExport)
         try! theNSExport.write(toFile: filePath, atomically: false, encoding: String.Encoding.utf8.rawValue)
 
+    }
+    
+    func convertToDigits(days: [String]) -> String
+    {
+        var result = ""
+        var i = 0
+        for day in days
+        {
+            if(i < days.count)
+            {
+                
+                if(day == "")
+                {
+                    result = result + "0,"
+                }
+                else{
+                    result = result + "1,"
+                }
+            }
+            else{
+                if(day == "")
+                {
+                    result = result + "0"
+                }
+                else{
+                    result = result + "0"
+                }
+            }
+            i = i + 1
+        }
+        return result
     }
     
     func startUp() ->Array<imported>
@@ -131,6 +171,7 @@ class Model
             if(checkClock(view: view))
             {
                 let theTime = calcTime(seconds: view.seconds)
+                var count = 0
                 result = "\(view.EventName) \(view.Week_Day) \(theTime.hour):\(theTime.min):\(theTime.sec) \(theTime.timeDay) times fired: \(timesAlerted(view: view))"
                 eventlist.append(result)
             }
@@ -155,16 +196,16 @@ class Model
         }
         else if(view.repeatVal == 1)
         {
-            return (hour - hourView) + 1
+            return (hourView - hour) + 1
         }
         else
         {
-            return ((minutes + hour*60) - (minView + hourView*60)) + 1
+            return ((minView + hourView*60) - (minutes + hour*60)) + 1
         }
         
         
     }
-    
+    //TODO: fix this for time
     func checkClock(view: AlarmView) -> Bool
     {
         let date = Date()

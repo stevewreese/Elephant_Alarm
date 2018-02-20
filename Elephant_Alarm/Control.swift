@@ -11,7 +11,7 @@ import UIKit
 //delegates of teh control
 protocol ControlDelegate: class
 {
-    func saved(theIndex index: Int, clock theTime: time)
+    func saved(theIndex index: Int, clock theTime: time, day Days: String)
 
 }
 
@@ -26,9 +26,9 @@ class Control
         
     }
     
-    func alarmSaved(AlarmIndex: Int, secs: Int)
+    func alarmSaved(AlarmIndex: Int, secs: Int, days: [String])
     {
-        delegate?.saved(theIndex: AlarmIndex, clock: theModel.calcTime(seconds: secs))
+        delegate?.saved(theIndex: AlarmIndex, clock: theModel.calcTime(seconds: secs), day: theModel.convertDays(days: days))
     }
     
     func getTime(secs: Int) -> time
@@ -48,6 +48,11 @@ class Control
     func alarmsTriggered(theViews: Array<AlarmView>) -> Array<String>
     {
         return theModel.checkAlarms(views: theViews)
+    }
+    
+    func convertDays(days: [String]) -> String
+    {
+        return theModel.convertDays(days: days)
     }
 
 }
