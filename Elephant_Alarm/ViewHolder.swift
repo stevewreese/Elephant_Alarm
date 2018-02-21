@@ -111,6 +111,7 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
         if tableView == self.eventTable {
             cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath as IndexPath)
             cell!.textLabel!.text = eventlist?[indexPath.row]
+            //let button = cell.viewWithTag(indexPath.row) as! UIButton
             
         }
         
