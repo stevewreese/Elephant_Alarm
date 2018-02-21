@@ -175,11 +175,11 @@ class Model
             view.timesTriggered = timesFired
             if(timesFired != 0)
             {
-                //if(!view.completed)
-                //{
+                if(!view.completed)
+                {
                     result = "\(view.EventName) \(view.date) times fired: \(timesFired)"
                     eventlist.append(result)
-                //}
+                }
                 
             }
             

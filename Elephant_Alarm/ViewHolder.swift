@@ -96,7 +96,7 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
         
         if tableView == self.alarmTable {
             cell = tableView.dequeueReusableCell(withIdentifier: "AlarmCell", for: indexPath as IndexPath)
-            if(indexPath.row < alarmList.count - 1)
+            if(alarmList[indexPath.row].EventName != "")
             {
                 var theTime : time = theControl.getTime(secs: alarmList[indexPath.row].seconds)
                 cell.textLabel!.text = alarmList[indexPath.row].EventName + " \(alarmList[indexPath.row].date) \(theTime.hour):\(theTime.min):\(theTime.sec) \(theTime.timeDay)"
