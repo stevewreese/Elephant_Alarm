@@ -21,9 +21,11 @@ class AlarmView : UIView, UITextFieldDelegate
     {
         case Hawaii, Alaska, Pacific, Mountain, Central, Eastern
     }
+    var date = ""
+    var completed = false
+    var timesTriggered = 0
     var seconds: Int = 0
-    var Week_Day = "Su"
-    var days : [String] = ["Su", "", "", "", "", "", ""]
+    var Week_Day = Alarm_Days.Sunday
     var duration : Int = 0
     var TimeZone = Alarm_Time_Zone.Mountain
     var secondsAdded: Int = 0
@@ -318,7 +320,7 @@ class AlarmView : UIView, UITextFieldDelegate
         buttonRepeatDay.layer.cornerRadius = 5
         buttonRepeatDay.backgroundColor = .cyan
         buttonRepeatDay.setTitleColor(.black, for: .normal)
-        buttonRepeatDay.setTitle("Once", for: .normal)
+        buttonRepeatDay.setTitle("Daily", for: .normal)
         buttonRepeatDay.addTarget(self, action: #selector(AlarmView.repeatSet(sender:)), for: .touchUpInside)
         
         self.addSubview(buttonRepeatDay)
@@ -624,7 +626,7 @@ class AlarmView : UIView, UITextFieldDelegate
     
     @objc func repeatSet(sender: UIButton!)
     {
-        if(sender.titleLabel?.text == "Once")
+        if(sender.titleLabel?.text == "Daily")
         {
             repeatVal = 0
             buttonRepeatDay.backgroundColor = .cyan
@@ -702,7 +704,31 @@ class AlarmView : UIView, UITextFieldDelegate
     @objc func save(sender: UIButton!)
     {
         EventName = "\(EventField.text!)"
-        theControl?.alarmSaved(AlarmIndex: index, secs: seconds, days: days)
+
+        let currentDate = Date()
+        let calendar = Calendar.current
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM.dd.yyyy"
+        let dayOfWeek = calendar.component(.weekday, from: currentDate as Date)
+        var getDateNumber = 0
+        getDateNumber   = (theControl?.convertDays(days: "\(Week_Day)"))!
+        var addToDay = 0
+        if(dayOfWeek < getDateNumber)
+        {
+            addToDay = getDateNumber - dayOfWeek
+        }
+        if(dayOfWeek > getDateNumber)
+        {
+            addToDay = (7 - getDateNumber) + dayOfWeek
+        }
+        var dateComponent = DateComponents()
+        
+        dateComponent.day = addToDay
+        
+        let futureDate = Calendar.current.date(byAdding: dateComponent, to: currentDate)
+        let result = formatter.string(from: futureDate!)
+        date = result
+        theControl?.alarmSaved(AlarmIndex: index, secs: seconds, days: "\(result)")
         
     }
     
@@ -713,39 +739,47 @@ class AlarmView : UIView, UITextFieldDelegate
     
     func changeDay(day: String)
     {
-        var theDays : String = day
-        var listOfDays : [String] = theDays.components(separatedBy: ",")
-        setDayButtons(dayList: listOfDays)
-        
-        /*switch(day) {
+        //var theDays : String = day
+        //var listOfDays : [String] = theDays.components(separatedBy: ",")
+        //setDayButtons(dayList: listOfDays)
+        buttonSun.backgroundColor = .white
+        switch(day) {
         case "Friday" :
             Week_Day = Alarm_Days.Friday
+            buttonFri.backgroundColor = .cyan
             break
         case "Saturday"  :
             Week_Day = Alarm_Days.Saturday
+            buttonSat.backgroundColor = .cyan
             break
         case "Sunday" :
             Week_Day = Alarm_Days.Sunday
+            buttonSun.backgroundColor = .cyan
             break
         case "Monday"  :
             Week_Day = Alarm_Days.Monday
+            buttonMon.backgroundColor = .cyan
             break
         case "Tuesday" :
             Week_Day = Alarm_Days.Tuesday
+            buttonTues.backgroundColor = .cyan
             break
         case "Wednesday" :
             Week_Day = Alarm_Days.Wednesday
+            buttonWed.backgroundColor = .cyan
             break
         case "Thursday" :
             Week_Day = Alarm_Days.Thursday
+            buttonThurs.backgroundColor = .cyan
             break
         default:
             Week_Day = Alarm_Days.Monday
+            buttonMon.backgroundColor = .cyan
             break
-        }*/
+        }
     }
     
-    func setDayButtons(dayList: [String])
+    /*func setDayButtons(dayList: [String])
     {
         if(dayList[0] == "0")
         {
@@ -819,7 +853,7 @@ class AlarmView : UIView, UITextFieldDelegate
             days[6] = "Sa"
         }
         Week_Day = (theControl?.convertDays(days: days))!
-    }
+    }*/
     
     
 
@@ -854,89 +888,102 @@ class AlarmView : UIView, UITextFieldDelegate
     {
         if(sender == buttonSun)
         {
-            if(buttonSun.backgroundColor == .cyan)
+            if(buttonSun.backgroundColor == .white)
             {
-                buttonSun.backgroundColor = .white
-                days[0] = ""
-            }
-            else{
                 buttonSun.backgroundColor = .cyan
-                days[0] = "Su"
+                Week_Day = Alarm_Days.Sunday
+                buttonMon.backgroundColor = .white
+                buttonTues.backgroundColor = .white
+                buttonWed.backgroundColor = .white
+                buttonThurs.backgroundColor = .white
+                buttonFri.backgroundColor = .white
+                buttonSat.backgroundColor = .white
             }
         }
         else if(sender == buttonMon)
         {
-            if(buttonMon.backgroundColor == .cyan)
+            if(buttonMon.backgroundColor == .white)
             {
-                buttonMon.backgroundColor = .white
-                days[1] = ""
-            }
-            else{
                 buttonMon.backgroundColor = .cyan
-                days[1] = "M"
+                Week_Day = Alarm_Days.Monday
+                buttonSun.backgroundColor = .white
+                buttonTues.backgroundColor = .white
+                buttonWed.backgroundColor = .white
+                buttonThurs.backgroundColor = .white
+                buttonFri.backgroundColor = .white
+                buttonSat.backgroundColor = .white
             }
         }
         else if(sender == buttonTues)
         {
-            if(buttonTues.backgroundColor == .cyan)
+            if(buttonTues.backgroundColor == .white)
             {
-                buttonTues.backgroundColor = .white
-                days[2] = ""
-            }
-            else{
                 buttonTues.backgroundColor = .cyan
-                days[2] = "Tu"
+                Week_Day = Alarm_Days.Tuesday
+                buttonSun.backgroundColor = .white
+                buttonMon.backgroundColor = .white
+                buttonWed.backgroundColor = .white
+                buttonThurs.backgroundColor = .white
+                buttonFri.backgroundColor = .white
+                buttonSat.backgroundColor = .white
             }
         }
         else if(sender == buttonWed)
         {
-            if(buttonWed.backgroundColor == .cyan)
+            if(buttonWed.backgroundColor == .white)
             {
-                buttonWed.backgroundColor = .white
-                days[3] = ""
-            }
-            else{
                 buttonWed.backgroundColor = .cyan
-                days[3] = "W"
+                Week_Day = Alarm_Days.Wednesday
+                buttonSun.backgroundColor = .white
+                buttonMon.backgroundColor = .white
+                buttonTues.backgroundColor = .white
+                buttonThurs.backgroundColor = .white
+                buttonFri.backgroundColor = .white
+                buttonSat.backgroundColor = .white
             }
         }
         else if(sender == buttonThurs)
         {
-            if(buttonThurs.backgroundColor == .cyan)
+            if(buttonThurs.backgroundColor == .white)
             {
-                buttonThurs.backgroundColor = .white
-                days[4] = ""
-            }
-            else{
                 buttonThurs.backgroundColor = .cyan
-                days[4] = "Th"
+                Week_Day = Alarm_Days.Thursday
+                buttonSun.backgroundColor = .white
+                buttonMon.backgroundColor = .white
+                buttonTues.backgroundColor = .white
+                buttonWed.backgroundColor = .white
+                buttonFri.backgroundColor = .white
+                buttonSat.backgroundColor = .white
             }
         }
         else if(sender == buttonFri)
         {
-            if(buttonFri.backgroundColor == .cyan)
+            if(buttonFri.backgroundColor == .white)
             {
-                buttonFri.backgroundColor = .white
-                days[5] = ""
-            }
-            else{
                 buttonFri.backgroundColor = .cyan
-                days[5] = "F"
+                Week_Day = Alarm_Days.Friday
+                buttonSun.backgroundColor = .white
+                buttonMon.backgroundColor = .white
+                buttonTues.backgroundColor = .white
+                buttonWed.backgroundColor = .white
+                buttonThurs.backgroundColor = .white
+                buttonSat.backgroundColor = .white
             }
         }
         else
         {
-            if(buttonSat.backgroundColor == .cyan)
+            if(buttonSat.backgroundColor == .white)
             {
-                buttonSat.backgroundColor = .white
-                days[6] = ""
-            }
-            else{
                 buttonSat.backgroundColor = .cyan
-                days[6] = "Sa"
+                Week_Day = Alarm_Days.Saturday
+                buttonSun.backgroundColor = .white
+                buttonMon.backgroundColor = .white
+                buttonTues.backgroundColor = .white
+                buttonWed.backgroundColor = .white
+                buttonThurs.backgroundColor = .white
+                buttonFri.backgroundColor = .white
             }
         }
-        Week_Day = (theControl?.convertDays(days: days))!
         /*let buttonSun = UIButton(frame: CGRect(x: 25, y: 167, width: 50, height: 25))
         let buttonMon = UIButton(frame: CGRect(x: 75, y: 167, width: 50, height: 25))
         let buttonTues = UIButton(frame: CGRect(x: 125, y: 167, width: 50, height: 25))

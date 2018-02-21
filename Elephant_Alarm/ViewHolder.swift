@@ -99,7 +99,7 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
             if(alarmList[indexPath.row].EventName != "")
             {
                 var theTime : time = theControl.getTime(secs: alarmList[indexPath.row].seconds)
-                cell.textLabel!.text = alarmList[indexPath.row].EventName + " \(alarmList[indexPath.row].Week_Day) \(theTime.hour):\(theTime.min):\(theTime.sec) \(theTime.timeDay)"
+                cell.textLabel!.text = alarmList[indexPath.row].EventName + " \(alarmList[indexPath.row].date) \(theTime.hour):\(theTime.min):\(theTime.sec) \(theTime.timeDay)"
             }
             else
             {
@@ -204,10 +204,10 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
                 let clock = AlarmView(frame: UIScreen.main.bounds)
                 clock.setIndex(index: indexArray)
                 clock.setControl(theControl: theControl)
-                print("time given: \(Int(view.time)!)")
                 clock.seconds = Int(view.time)!
                 clock.EventField.text = view.label
                 clock.EventName = view.label
+                clock.date = view.date
                 clock.changeDay(day: view.day)
                 clock.setZone(zone: view.zone)
                 clock.setRepeat(repeatValue: view.repeating)

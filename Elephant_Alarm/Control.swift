@@ -26,9 +26,9 @@ class Control
         
     }
     
-    func alarmSaved(AlarmIndex: Int, secs: Int, days: [String])
+    func alarmSaved(AlarmIndex: Int, secs: Int, days: String)
     {
-        delegate?.saved(theIndex: AlarmIndex, clock: theModel.calcTime(seconds: secs), day: theModel.convertDays(days: days))
+        delegate?.saved(theIndex: AlarmIndex, clock: theModel.calcTime(seconds: secs), day: days)
     }
     
     func getTime(secs: Int) -> time
@@ -50,9 +50,9 @@ class Control
         return theModel.checkAlarms(views: theViews)
     }
     
-    func convertDays(days: [String]) -> String
+    func convertDays(days: String) -> Int
     {
-        return theModel.convertDays(days: days)
+        return theModel.getDayNumber(day: days)
     }
 
 }

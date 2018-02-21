@@ -22,13 +22,15 @@ struct imported
     var day: String
     var zone: String
     var repeating: Int
-    init(label: String, time: String, day: String, zone: String, repeating: Int)
+    var date: String
+    init(label: String, time: String, day: String, zone: String, repeating: Int, date: String)
     {
         self.label = label
         self.time = time
         self.day = day
         self.zone = zone
         self.repeating = repeating
+        self.date = date
     }
 }
 
@@ -102,7 +104,7 @@ class Model
     {
         var toExport: String = ""
         for view in views {
-            toExport = "\(toExport)\(view.EventName)_\(view.seconds)_\(convertToDigits(days: view.days))_\(view.TimeZone)_\(view.repeatVal)#"
+            toExport = "\(toExport)\(view.EventName)_\(view.seconds)_\(view.Week_Day)_\(view.date)_\(view.TimeZone)_\(view.repeatVal)#"
         }
         print(toExport)
         let theNSExport: NSString = toExport as NSString
@@ -152,8 +154,8 @@ class Model
             let comp = item.components(separatedBy: "_")
             if(comp.count > 1)
             {
-                var importStuff = imported(label: comp[0], time: comp[1], day: comp[2], zone: comp[3], repeating: Int (comp[4])!)
-
+                var importStuff = imported(label: comp[0], time: comp[1], day: comp[2], zone: comp[4], repeating: Int (comp[5])!, date: comp[3])
+//
                 importList.append(importStuff)
             }
 
@@ -168,43 +170,91 @@ class Model
         var result : String = ""
         for view in views
         {
-            if(checkClock(view: view))
+            let theTime = calcTime(seconds: view.seconds)
+            var timesFired = timesAlerted(view: view) + view.timesTriggered
+            view.timesTriggered = timesFired
+            if(timesFired != 0)
             {
-                let theTime = calcTime(seconds: view.seconds)
-                var count = 0
-                result = "\(view.EventName) \(view.Week_Day) \(theTime.hour):\(theTime.min):\(theTime.sec) \(theTime.timeDay) times fired: \(timesAlerted(view: view))"
-                eventlist.append(result)
+                if(!view.completed)
+                {
+                    result = "\(view.EventName) \(view.date) times fired: \(timesFired)"
+                    eventlist.append(result)
+                }
+                
             }
+            
         }
         return eventlist
     }
     
     func timesAlerted(view: AlarmView)-> Int
     {
-        let date = Date()
-        let calendar = Calendar.current
-        var hour = calendar.component(.hour, from: date as Date)
-        hour = changeTimeZone(time: hour, zone: "\(view.TimeZone)")
-        let minutes = calendar.component(.minute, from: date as Date)
-        let day = calendar.component(.weekday, from: date as Date)
-        let alarmDay = getDayNumber(day: "\(view.Week_Day)")
-        let hourView = view.seconds/3600
-        let minView = view.seconds/3600/60
-        if(view.repeatVal == 0)
-        {
-            return 1
-        }
-        else if(view.repeatVal == 1)
-        {
-            return (hourView - hour) + 1
-        }
-        else
-        {
-            return ((minView + hourView*60) - (minutes + hour*60)) + 1
-        }
+        var date : Date? = nil
+        date = Date()
         
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM.dd.yyyy"
+        
+        var viewDate = formatter.date(from: view.date)
+        viewDate?.addTimeInterval(TimeInterval(view.seconds))
+        let calendar = Calendar.current
+        var hour = calendar.component(.hour, from: date as! Date)
+        hour = changeTimeZone(time: hour, zone: "\(view.TimeZone)")
+        let minutes = calendar.component(.minute, from: date as! Date)
+        let seconds = calendar.component(.second, from: date as! Date)
+        
+        let day = calendar.component(.weekday, from: date as! Date)
+        let alarmDay = getDayNumber(day: "\(view.Week_Day)")
+        let currentDate = seconds + minutes * 60 + hour * 3600
+        let calendarNS = NSCalendar.current
+        if(date! > viewDate!)
+        {
+            
+            
+
+                if(view.repeatVal == 0)
+                {
+                    let components = calendarNS.dateComponents([.day], from: viewDate!, to: date!)
+                    return components.day! + 1
+                }
+                else if(view.repeatVal == 1)
+                {
+                    let components = calendarNS.dateComponents([.hour], from: viewDate!, to: date!)
+                    return components.hour!
+                }
+                else
+                {
+                    let components = calendarNS.dateComponents([.minute], from: viewDate!, to: date!)
+                    return components.minute!
+                }
+        
+            
+        }
+        if(date! == viewDate!)
+        {
+            if(currentDate < view.seconds)
+            {
+                if(view.repeatVal == 0)
+                {
+                    return 1
+                }
+                else if(view.repeatVal == 1)
+                {
+                    let components = calendarNS.dateComponents([.hour], from: viewDate!, to: date!)
+                    return components.hour!
+                }
+                else
+                {
+                    let components = calendarNS.dateComponents([.minute], from: viewDate!, to: date!)
+                    return components.minute!
+                }
+            }
+            
+        }
+        return 0
         
     }
+    
     //TODO: fix this for time
     func checkClock(view: AlarmView) -> Bool
     {
