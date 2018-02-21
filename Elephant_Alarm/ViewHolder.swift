@@ -111,7 +111,13 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
         if tableView == self.eventTable {
             cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath as IndexPath)
             cell!.textLabel!.text = eventlist?[indexPath.row]
-            //let button = cell.viewWithTag(indexPath.row) as! UIButton
+            let compButton = UIButton(frame: CGRect(x: 300, y: 10, width: 100, height: 25))
+            compButton.backgroundColor = .lightGray
+            compButton.layer.cornerRadius = 5
+            compButton.setTitleColor(.black, for: .normal)
+            compButton.setTitle("completed", for: .normal)
+            //compButton.addTarget(self, action: #selector(AlarmView.save(sender:)), for: .touchUpInside)
+            cell.addSubview(compButton)
             
         }
         

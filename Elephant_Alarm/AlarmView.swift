@@ -25,7 +25,7 @@ class AlarmView : UIView, UITextFieldDelegate
     var completed = false
     var timesTriggered = 0
     var seconds: Int = 0
-    var Week_Day = Alarm_Days.Wednesday
+    var Week_Day = Alarm_Days.Sunday
     var duration : Int = 0
     var TimeZone = Alarm_Time_Zone.Mountain
     var secondsAdded: Int = 0
@@ -893,15 +893,13 @@ class AlarmView : UIView, UITextFieldDelegate
             if(buttonSun.backgroundColor == .white)
             {
                 buttonSun.backgroundColor = .cyan
-                //Week_Day = Alarm_Days.Sunday
-                daysOfWeek[0] = 1
-
-            }
-            else
-            {
-                buttonSun.backgroundColor = .white
-                //Week_Day = Alarm_Days.Monday
-                daysOfWeek[0] = 0
+                Week_Day = Alarm_Days.Sunday
+                buttonMon.backgroundColor = .white
+                buttonTues.backgroundColor = .white
+                buttonWed.backgroundColor = .white
+                buttonThurs.backgroundColor = .white
+                buttonFri.backgroundColor = .white
+                buttonSat.backgroundColor = .white
             }
         }
         else if(sender == buttonMon)
@@ -921,7 +919,7 @@ class AlarmView : UIView, UITextFieldDelegate
         }
         else if(sender == buttonTues)
         {
-            /*if(buttonTues.backgroundColor == .white)
+            if(buttonTues.backgroundColor == .white)
             {
                 buttonTues.backgroundColor = .cyan
                 Week_Day = Alarm_Days.Tuesday
@@ -931,24 +929,11 @@ class AlarmView : UIView, UITextFieldDelegate
                 buttonThurs.backgroundColor = .white
                 buttonFri.backgroundColor = .white
                 buttonSat.backgroundColor = .white
-            }*/
-            if(buttonTues.backgroundColor == .white)
-            {
-                buttonTues.backgroundColor = .cyan
-                //Week_Day = Alarm_Days.Sunday
-                daysOfWeek[2] = 1
-                
-            }
-            else
-            {
-                buttonTues.backgroundColor = .white
-                //Week_Day = Alarm_Days.Monday
-                daysOfWeek[2] = 0
             }
         }
         else if(sender == buttonWed)
         {
-            /*if(buttonWed.backgroundColor == .white)
+            if(buttonWed.backgroundColor == .white)
             {
                 buttonWed.backgroundColor = .cyan
                 Week_Day = Alarm_Days.Wednesday
@@ -958,21 +943,7 @@ class AlarmView : UIView, UITextFieldDelegate
                 buttonThurs.backgroundColor = .white
                 buttonFri.backgroundColor = .white
                 buttonSat.backgroundColor = .white
-            }*/
-            if(buttonWed.backgroundColor == .white)
-            {
-                buttonWed.backgroundColor = .cyan
-                //Week_Day = Alarm_Days.Sunday
-                daysOfWeek[3] = 1
-                
             }
-            else
-            {
-                buttonWed.backgroundColor = .white
-                //Week_Day = Alarm_Days.Monday
-                daysOfWeek[3] = 0
-            }
-            
         }
         else if(sender == buttonThurs)
         {

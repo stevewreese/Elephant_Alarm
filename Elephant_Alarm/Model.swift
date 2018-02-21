@@ -146,20 +146,24 @@ class Model
     
     func startUp() ->Array<imported>
     {
-        let listener: NSString = try! NSString.init(contentsOfFile: filePath, encoding: String.Encoding.utf8.rawValue)
-        let items = listener.components(separatedBy: "#")
         var importList : Array<imported> = Array()
-        for item in items{
+        do{
+            let listener: NSString = try! NSString.init(contentsOfFile: filePath, encoding: String.Encoding.utf8.rawValue)
+            let items = listener.components(separatedBy: "#")
             
-            let comp = item.components(separatedBy: "_")
-            if(comp.count > 1)
-            {
-                var importStuff = imported(label: comp[0], time: comp[1], day: comp[2], zone: comp[4], repeating: Int (comp[5])!, date: comp[3])
-//
-                importList.append(importStuff)
+            for item in items{
+                
+                let comp = item.components(separatedBy: "_")
+                if(comp.count > 1)
+                {
+                    var importStuff = imported(label: comp[0], time: comp[1], day: comp[2], zone: comp[4], repeating: Int (comp[5])!, date: comp[3])
+                    //
+                    importList.append(importStuff)
+                }
+                
             }
-
         }
+        
         return importList
         
     }
