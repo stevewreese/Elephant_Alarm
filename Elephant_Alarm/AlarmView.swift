@@ -741,10 +741,10 @@ class AlarmView : UIView, UITextFieldDelegate
     
     func changeDay(day: String)
     {
-        //var theDays : String = day
-        //var listOfDays : [String] = theDays.components(separatedBy: ",")
-        //setDayButtons(dayList: listOfDays)
-        buttonSun.backgroundColor = .white
+        var theDays : String = day
+        var listOfDays : [String] = theDays.components(separatedBy: ",")
+        setDayButtons(dayList: listOfDays)
+        /*buttonSun.backgroundColor = .white
         switch(day) {
         case "Friday" :
             Week_Day = Alarm_Days.Friday
@@ -778,84 +778,83 @@ class AlarmView : UIView, UITextFieldDelegate
             Week_Day = Alarm_Days.Monday
             buttonMon.backgroundColor = .cyan
             break
-        }
+        }*/
     }
     
-    /*func setDayButtons(dayList: [String])
+    func setDayButtons(dayList: [String])
     {
         if(dayList[0] == "0")
         {
             buttonSun.backgroundColor = .white
-            days[0] = ""
+            daysOfWeek[0] = 0
         }
         else
         {
             buttonSun.backgroundColor = .cyan
-            days[0] = "Su"
+            daysOfWeek[0] = 1
         }
         if(dayList[1] == "0")
         {
             buttonMon.backgroundColor = .white
-            days[1] = ""
+            daysOfWeek[1] = 0
         }
         else
         {
             buttonMon.backgroundColor = .cyan
-            days[1] = "M"
+            daysOfWeek[1] = 1
         }
         
         if(dayList[2] == "0")
         {
             buttonTues.backgroundColor = .white
-            days[2] = ""
+            daysOfWeek[2] = 0
         }
         else
         {
             buttonTues.backgroundColor = .cyan
-            days[2] = "Tu"
+            daysOfWeek[2] = 1
         }
         if(dayList[3] == "0")
         {
             buttonWed.backgroundColor = .white
-            days[3] = ""
+            daysOfWeek[3] = 0
         }
         else
         {
             buttonWed.backgroundColor = .cyan
-            days[3] = "W"
+            daysOfWeek[3] = 1
         }
         if(dayList[4] == "0")
         {
             buttonThurs.backgroundColor = .white
-            days[4] = ""
+            daysOfWeek[4] = 0
         }
         else
         {
             buttonThurs.backgroundColor = .cyan
-            days[4] = "Th"
+            daysOfWeek[4] = 1
         }
         if(dayList[5] == "0")
         {
             buttonFri.backgroundColor = .white
-            days[5] = ""
+            daysOfWeek[5] = 0
         }
         else
         {
             buttonFri.backgroundColor = .cyan
-            days[5] = "F"
+            daysOfWeek[5] = 1
         }
         if(dayList[6] == "0")
         {
             buttonSat.backgroundColor = .white
-            days[6] = ""
+            daysOfWeek[6] = 0
         }
         else
         {
             buttonSat.backgroundColor = .cyan
-            days[6] = "Sa"
+            daysOfWeek[6] = 1
         }
-        Week_Day = (theControl?.convertDays(days: days))!
-    }*/
+    }
     
     
 

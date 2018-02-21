@@ -215,7 +215,7 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
                 clock.EventField.text = view.label
                 clock.EventName = view.label
                 clock.date = view.date
-                clock.changeDay(day: view.day)
+                clock.changeDay(day: view.week)
                 clock.setZone(zone: view.zone)
                 clock.setRepeat(repeatValue: view.repeating)
                 alarmList.append(clock)

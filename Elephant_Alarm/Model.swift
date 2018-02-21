@@ -23,7 +23,8 @@ struct imported
     var zone: String
     var repeating: Int
     var date: String
-    init(label: String, time: String, day: String, zone: String, repeating: Int, date: String)
+    var week: String
+    init(label: String, time: String, day: String, zone: String, repeating: Int, date: String, week: String)
     {
         self.label = label
         self.time = time
@@ -31,6 +32,7 @@ struct imported
         self.zone = zone
         self.repeating = repeating
         self.date = date
+        self.week = week
     }
 }
 
@@ -104,7 +106,7 @@ class Model
     {
         var toExport: String = ""
         for view in views {
-            toExport = "\(toExport)\(view.EventName)_\(view.seconds)_\(view.Week_Day)_\(view.date)_\(view.TimeZone)_\(view.repeatVal)#"
+            toExport = "\(toExport)\(view.EventName)_\(view.seconds)_\(view.Week_Day)_\(view.date)_\(view.TimeZone)_\(view.repeatVal)_\(convertToStringDigits(days: view.daysOfWeek))#"
         }
         print(toExport)
         let theNSExport: NSString = toExport as NSString
@@ -113,31 +115,18 @@ class Model
 
     }
     
-    func convertToDigits(days: [String]) -> String
+    
+    
+    func convertToDigits(week: String) -> [Int]
     {
-        var result = ""
+        var result : [Int] = [0, 0, 0, 0, 0, 0, 0]
+        let days = week.components(separatedBy: ",")
         var i = 0
         for day in days
         {
-            if(i < days.count)
+            if(day == "1")
             {
-                
-                if(day == "")
-                {
-                    result = result + "0,"
-                }
-                else{
-                    result = result + "1,"
-                }
-            }
-            else{
-                if(day == "")
-                {
-                    result = result + "0"
-                }
-                else{
-                    result = result + "0"
-                }
+                result[i] = 1
             }
             i = i + 1
         }
@@ -156,7 +145,7 @@ class Model
                 let comp = item.components(separatedBy: "_")
                 if(comp.count > 1)
                 {
-                    var importStuff = imported(label: comp[0], time: comp[1], day: comp[2], zone: comp[4], repeating: Int (comp[5])!, date: comp[3])
+                    var importStuff = imported(label: comp[0], time: comp[1], day: comp[2], zone: comp[4], repeating: Int (comp[5])!, date: comp[3], week: comp[6])
                     //
                     importList.append(importStuff)
                 }
@@ -334,6 +323,38 @@ class Model
         default:
             return time
         }
+    }
+    
+    //convert week array to string representation
+    func convertToStringDigits(days: [Int]) -> String
+    {
+        var result = ""
+        var i = 0
+        for day in days
+        {
+            if(i < days.count)
+            {
+                
+                if(day == 0)
+                {
+                    result = result + "0,"
+                }
+                else{
+                    result = result + "1,"
+                }
+            }
+            else{
+                if(day == 0)
+                {
+                    result = result + "0"
+                }
+                else{
+                    result = result + "0"
+                }
+            }
+            i = i + 1
+        }
+        return result
     }
 }
 
