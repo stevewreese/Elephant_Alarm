@@ -33,6 +33,7 @@ class AlarmView : UIView, UITextFieldDelegate
     var EventName = ""
     var repeatVal = 0
     var index: Int = 0;
+    var empty = true
     var daysOfWeek : [Int] = [1, 0, 0, 0, 0, 0, 0]
     var EventField: UITextField = UITextField (frame: CGRect(x: 0, y: 105, width: UIScreen.main.bounds.width, height: 50));
     let buttonRepeatDay = UIButton(frame: CGRect(x: 50, y: 360, width: 100, height: 25))
@@ -188,7 +189,7 @@ class AlarmView : UIView, UITextFieldDelegate
         saveButton.backgroundColor = .cyan
         saveButton.layer.cornerRadius = 5
         saveButton.setTitleColor(.black, for: .normal)
-        saveButton.setTitle("Save", for: .normal)
+        saveButton.setTitle("Save/Back", for: .normal)
         saveButton.addTarget(self, action: #selector(AlarmView.save(sender:)), for: .touchUpInside)
         self.addSubview(saveButton)
         
@@ -322,7 +323,7 @@ class AlarmView : UIView, UITextFieldDelegate
         buttonRepeatDay.layer.cornerRadius = 5
         buttonRepeatDay.backgroundColor = .cyan
         buttonRepeatDay.setTitleColor(.black, for: .normal)
-        buttonRepeatDay.setTitle("Daily", for: .normal)
+        buttonRepeatDay.setTitle("Once", for: .normal)
         buttonRepeatDay.addTarget(self, action: #selector(AlarmView.repeatSet(sender:)), for: .touchUpInside)
         
         self.addSubview(buttonRepeatDay)
@@ -339,7 +340,7 @@ class AlarmView : UIView, UITextFieldDelegate
         buttonRepeatMin.layer.cornerRadius = 5
         buttonRepeatMin.backgroundColor = .white
         buttonRepeatMin.setTitleColor(.black, for: .normal)
-        buttonRepeatMin.setTitle("Every Minute", for: .normal)
+        buttonRepeatMin.setTitle("Minute", for: .normal)
         buttonRepeatMin.addTarget(self, action: #selector(AlarmView.repeatSet(sender:)), for: .touchUpInside)
         
         self.addSubview(buttonRepeatMin)
@@ -628,7 +629,7 @@ class AlarmView : UIView, UITextFieldDelegate
     
     @objc func repeatSet(sender: UIButton!)
     {
-        if(sender.titleLabel?.text == "Daily")
+        if(sender.titleLabel?.text == "Once")
         {
             repeatVal = 0
             buttonRepeatDay.backgroundColor = .cyan
@@ -730,6 +731,7 @@ class AlarmView : UIView, UITextFieldDelegate
         let futureDate = Calendar.current.date(byAdding: dateComponent, to: currentDate)*/
         let result = formatter.string(from: currentDate)
         date = result
+        empty = false
         theControl?.alarmSaved(AlarmIndex: index, secs: seconds, days: "\(result)")
         
     }
@@ -889,8 +891,7 @@ class AlarmView : UIView, UITextFieldDelegate
     {
         if(sender == buttonSun)
         {
-            if(buttonSun.backgroundColor == .white)
-            {
+
                 if(buttonSun.backgroundColor == .white)
                 {
                     buttonSun.backgroundColor = .cyan
@@ -903,7 +904,6 @@ class AlarmView : UIView, UITextFieldDelegate
                     //Week_Day = Alarm_Days.Monday
                     daysOfWeek[0] = 0
                 }
-            }
         }
         else if(sender == buttonMon)
         {

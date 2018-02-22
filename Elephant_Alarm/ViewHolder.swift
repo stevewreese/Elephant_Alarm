@@ -116,7 +116,7 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
             compButton.layer.cornerRadius = 5
             compButton.setTitleColor(.black, for: .normal)
             compButton.setTitle("completed", for: .normal)
-            //compButton.addTarget(self, action: #selector(AlarmView.save(sender:)), for: .touchUpInside)
+            compButton.addTarget(self, action: #selector(complete(sender:)), for: .touchUpInside)
             cell.addSubview(compButton)
             
         }
@@ -180,6 +180,18 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
                               to: UIApplication.shared, for: nil)
     }
     
+    @objc func complete(sender: UIButton!)
+    {
+        if(sender.backgroundColor == .lightGray)
+        {
+            sender.backgroundColor = .cyan
+        }
+        else
+        {
+            sender.backgroundColor = .lightGray
+        }
+    }
+    
     func saved(theIndex index: Int, clock theTime: time, day: String) {
         alarmList[index].removeFromSuperview()
         alarmTable.cellForRow(at: IndexPath(row: index, section: 0))?.textLabel?.text = alarmList[index].EventName + " \(day) \(theTime.hour):\(theTime.min):\(theTime.sec) \(theTime.timeDay)"
@@ -218,6 +230,7 @@ class ViewHolder: UIView, UITableViewDelegate, UITableViewDataSource, ControlDel
                 clock.changeDay(day: view.week)
                 clock.setZone(zone: view.zone)
                 clock.setRepeat(repeatValue: view.repeating)
+                clock.empty = false
                 alarmList.append(clock)
                 indexArray = indexArray + 1
             }

@@ -108,6 +108,8 @@ class Model
         for view in views {
             toExport = "\(toExport)\(view.EventName)_\(view.seconds)_\(view.Week_Day)_\(view.date)_\(view.TimeZone)_\(view.repeatVal)_\(convertToStringDigits(days: view.daysOfWeek))#"
         }
+        //
+       // 02.14.2018
         print(toExport)
         let theNSExport: NSString = toExport as NSString
         print(theNSExport)
@@ -137,7 +139,7 @@ class Model
     {
         var importList : Array<imported> = Array()
         do{
-            let listener: NSString = try! NSString.init(contentsOfFile: filePath, encoding: String.Encoding.utf8.rawValue)
+            let listener: NSString = try NSString.init(contentsOfFile: filePath, encoding: String.Encoding.utf8.rawValue)
             let items = listener.components(separatedBy: "#")
             
             for item in items{
@@ -152,6 +154,10 @@ class Model
                 
             }
         }
+        catch
+        {
+            
+        }
         
         return importList
         
@@ -163,9 +169,13 @@ class Model
         var result : String = ""
         for view in views
         {
+            var timesFired = 0
             let theTime = calcTime(seconds: view.seconds)
-            var timesFired = timesAlerted(view: view) + view.timesTriggered
-            view.timesTriggered = timesFired
+            if(!view.empty)
+            {
+                timesFired = timesAlerted(view: view) + view.timesTriggered
+                view.timesTriggered = timesFired
+            }
             if(timesFired != 0)
             {
                 if(!view.completed)
@@ -191,94 +201,133 @@ class Model
         var viewDate = formatter.date(from: view.date)
         viewDate?.addTimeInterval(TimeInterval(view.seconds))
         let calendar = Calendar.current
-        var hour = calendar.component(.hour, from: date as! Date)
-        hour = changeTimeZone(time: hour, zone: "\(view.TimeZone)")
-        let minutes = calendar.component(.minute, from: date as! Date)
-        let seconds = calendar.component(.second, from: date as! Date)
-        
-        let day = calendar.component(.weekday, from: date as! Date)
-        let alarmDay = getDayNumber(day: "\(view.Week_Day)")
-        let currentDate = seconds + minutes * 60 + hour * 3600
+        let changeZone = changeTimeZone(zone: "\(view.TimeZone)")
+        date?.addTimeInterval(changeZone)
+        let day = calendar.component(.weekday, from: viewDate as! Date)
+        //let currentDate = seconds + minutes * 60 + hour * 3600
         let calendarNS = NSCalendar.current
-        if(date! > viewDate!)
+        
+        if(view.daysOfWeek[day-1] == 0)
+        {
+            var i = day - 1
+            var daysChecked = false
+            while(i < 7)
+            {
+                if(view.daysOfWeek[i] == 0)
+                {
+                    viewDate?.addTimeInterval(TimeInterval(86400))
+                }
+                else
+                {
+                    daysChecked = true
+                    i = 7
+                }
+                i = i + 1
+            }
+            var j = day - 1
+            if(j > 0 && !daysChecked)
+            {
+                while(j > 0)
+                {
+                    if(view.daysOfWeek[j] == 0)
+                    {
+                        viewDate?.addTimeInterval(TimeInterval(86400))
+                    }
+                    else
+                    {
+                        daysChecked = true
+                        j = 0
+                    }
+                    j = j - 1
+                }
+            }
+            if(!daysChecked)
+            {
+                return 0
+            }
+        }
+        
+        if(date! >= viewDate!)
         {
             
             
 
                 if(view.repeatVal == 0)
                 {
-                    let components = calendarNS.dateComponents([.day], from: viewDate!, to: date!)
-                    return components.day! + 1
+
+                    var daysFired = 0
+                    while(date! > viewDate!)
+                    {
+                        //let day = calendar.component(.weekday, from: viewDate as! Date)
+                        if(view.daysOfWeek[day - 1] == 1)
+                        {
+                            daysFired = daysFired + 1
+                        }
+                        viewDate?.addTimeInterval(TimeInterval(86400))
+                    }
+                    return daysFired
                 }
-                else if(view.repeatVal == 1)
+                else if(view.repeatVal == 1 )
                 {
+                    /*if(view.daysOfWeek[day-1] == 1)
+                    {
+                        let components = calendarNS.dateComponents([.hour], from: viewDate!, to: date!)
+                        return components.hour!
+                    }
+                    var i = day - 1
+                    var daysChecked = false
+                    while(i < 7)
+                    {
+                        if(view.daysOfWeek[i] == 0)
+                        {
+                            viewDate?.addTimeInterval(TimeInterval(86400))
+                        }
+                        else
+                        {
+                            daysChecked = true
+                            viewDate?.addTimeInterval(TimeInterval(86400))
+                            i = 7
+                        }
+                        i = i + 1
+                    }
+                    var j = day - 1
+                    if(j > 0 && !daysChecked)
+                    {
+                        while(j > 0)
+                        {
+                            if(view.daysOfWeek[j] == 0)
+                            {
+                                viewDate?.addTimeInterval(TimeInterval(86400))
+                            }
+                            else
+                            {
+                                daysChecked = true
+                                viewDate?.addTimeInterval(TimeInterval(86400))
+                                j = 0
+                            }
+                            j = j - 1
+                        }
+                    }
+                    if(!daysChecked)
+                    {
+                        return 0
+                    }*/
                     let components = calendarNS.dateComponents([.hour], from: viewDate!, to: date!)
                     return components.hour!
                 }
                 else
                 {
+                    
                     let components = calendarNS.dateComponents([.minute], from: viewDate!, to: date!)
                     return components.minute!
                 }
         
-            
-        }
-        if(date! == viewDate!)
-        {
-            if(currentDate < view.seconds)
-            {
-                if(view.repeatVal == 0)
-                {
-                    return 1
-                }
-                else if(view.repeatVal == 1)
-                {
-                    let components = calendarNS.dateComponents([.hour], from: viewDate!, to: date!)
-                    return components.hour!
-                }
-                else
-                {
-                    let components = calendarNS.dateComponents([.minute], from: viewDate!, to: date!)
-                    return components.minute!
-                }
-            }
             
         }
         return 0
         
     }
     
-    //TODO: fix this for time
-    func checkClock(view: AlarmView) -> Bool
-    {
-        let date = Date()
-        let calendar = Calendar.current
-        var hour = calendar.component(.hour, from: date as Date)
-        hour = changeTimeZone(time: hour, zone: "\(view.TimeZone)")
-        let minutes = calendar.component(.minute, from: date as Date)
-        let seconds = calendar.component(.second, from: date as Date)
-        
-        let day = calendar.component(.weekday, from: date as Date)
-        let alarmDay = getDayNumber(day: "\(view.Week_Day)")
-        let currentDate = seconds + minutes * 60 + hour * 3600
-        if(day >= alarmDay)
-        {
-            if(currentDate < view.seconds && day == alarmDay)
-            {
-                return false
-            }
-            else{
-                return true
-            }
-        }
-        else
-        {
-            return false
-        }
-        
-        
-        
-    }
     
     //get the Number value of the day of the week
     func getDayNumber(day: String) -> Int
@@ -304,24 +353,24 @@ class Model
     }
     
     //hacky work around to change time zone.
-    func changeTimeZone(time: Int, zone: String) -> Int
+    func changeTimeZone(zone: String) -> TimeInterval
     {
         //Hawaii, Alaska, Pacific, Mountain, Central, Eastern
         switch(zone) {
         case "Mountain" :
-            return time
+            return 0
         case "Hawaii"  :
-            return time - 3
+            return 86400 * -3
         case "Alaska" :
-            return time - 2
+            return 86400 *  -2
         case "Pacific" :
-            return time - 1
+            return -86400
         case "Central":
-            return time + 1
+            return 86400
         case "Eastern"  :
-            return time + 2
+            return 86400 * 2
         default:
-            return time
+            return 0
         }
     }
     
